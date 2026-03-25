@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model currencies {
+  id     Int      @id @default(autoincrement())
+  code   String   @unique @db.VarChar(3)
+  name   String   @db.VarChar(50)
+  symbol String?  @db.VarChar(10)
+  stocks stocks[]
+}
+
+model markets {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique @db.VarChar(50)
+  long_name   String?  @db.VarChar(100)
+  description String?
+  stocks      stocks[]
+}
+
+model portfolio {
+  id         Int       @id @default(autoincrement())
+  stock_id   Int
+  quantity   Int
+  price      Decimal   @db.Decimal(15, 2)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  stocks     stocks    @relation(fields: [stock_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model prices_history {
+  stock_id Int?
+  date     DateTime? @db.Date
+  price    Decimal?  @db.Decimal
+  id       BigInt    @id @default(autoincrement())
+  stocks   stocks?   @relation(fields: [stock_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([stock_id, date], map: "stock_id_date_unique")
+}
+
+model quotes_history {
+  stock_id     Int?
+  date         DateTime? @db.Date
+  price_change Decimal?  @db.Decimal
+  volume       Decimal?  @db.Decimal
+  traded_value Decimal?  @db.Decimal
+  closing_vwap Decimal?  @db.Decimal
+  id           BigInt    @id @default(autoincrement())
+  stocks       stocks?   @relation(fields: [stock_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "prices_history_stock_id_fkey")
+
+  @@unique([stock_id, date], map: "stock_id_date_unique_qhistory")
+}
+
+model stocks {
+  id                   Int                    @id @default(autoincrement())
+  name                 String?                @db.VarChar(255)
+  ticker               String?                @db.VarChar(50)
+  currencies_id        Int?
+  market_id            Int?
+  portfolio            portfolio[]
+  prices_history       prices_history[]
+  quotes_history       quotes_history[]
+  currencies           currencies?            @relation(fields: [currencies_id], references: [id], onUpdate: NoAction)
+  markets              markets?               @relation(fields: [market_id], references: [id], onUpdate: NoAction)
+  trading_data_history trading_data_history[]
+}
+
+model trading_data_history {
+  stock_id       Int?
+  date           DateTime? @db.Date
+  high_52w       Decimal?  @db.Decimal
+  low_52w        Decimal?  @db.Decimal
+  eps            Decimal?  @db.Decimal
+  dps            Decimal?  @db.Decimal
+  nav            Decimal?  @db.Decimal
+  pe_ratio       Decimal?  @db.Decimal
+  dividend_yield Decimal?  @db.Decimal
+  price_to_nav   Decimal?  @db.Decimal
+  id             BigInt    @id @default(autoincrement())
+  stocks         stocks?   @relation(fields: [stock_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "prices_history_stock_id_fkey")
+
+  @@unique([stock_id, date], map: "stock_id_date_unique_tdhistory")
+}
