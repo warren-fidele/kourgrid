@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Manager WebApp
+
+A Next.js application for tracking stock performance and fundamental data.
+
+## Features
+- **Dashboard**: Market overview with a searchable list of stocks.
+- **Company Pages**: Detailed stock information, historical price charts, and fundamental metrics.
+- **Database**: Powered by PostgreSQL and Prisma ORM.
+
+## Tech Stack
+- **Framework**: Next.js 14/15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Charts**: Recharts
+- **ORM**: Prisma
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
+- Node.js 18+
+- A PostgreSQL database (`trading_db`)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 2. Environment Variables
+Create a `.env` file in the `webapp` directory and add your database connection string:
+
+```env
+DATABASE_URL="postgresql://user:password@host:port/trading_db?schema=public"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Installation
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Database Setup
+Since the database already exists, you can introspect the schema and generate the Prisma Client:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx prisma db pull
+npx prisma generate
+```
 
-## Learn More
+### 5. Running the App
+```bash
+npm run dev
+```
+The app will be available at `http://localhost:3000`.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Development
+To add more UI components, use:
+```bash
+npx shadcn@latest add [component-name]
+```
