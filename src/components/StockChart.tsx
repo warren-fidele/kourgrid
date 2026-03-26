@@ -50,17 +50,17 @@ export default function StockChart({ data }: { data: StockPrice[] }) {
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: 'hsl(var(--background))',
-              borderColor: 'hsl(var(--border))',
+              backgroundColor: 'var(--background)',
+              borderColor: 'var(--border)',
               borderRadius: '8px',
             }}
-            labelStyle={{ fontWeight: 'bold' }}
+            labelStyle={{ fontWeight: 'bold', color: 'var(--foreground)' }}
             formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
           />
           <Line
             type="monotone"
             dataKey="price"
-            stroke="hsl(var(--primary))"
+            stroke="var(--primary)"
             strokeWidth={2}
             dot={false}
             activeDot={{ r: 6 }}
