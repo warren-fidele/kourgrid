@@ -153,6 +153,7 @@ export async function getMostActiveStocks(limit = 5) {
 
   return active.map(a => ({
     ticker: a.stocks?.ticker,
+    name: a.stocks?.name,
     volume: Number(a.volume),
   }));
 }
@@ -174,6 +175,7 @@ export async function getHighestValueStocks(limit = 5) {
 
   return value.map(v => ({
     ticker: v.stocks?.ticker,
+    name: v.stocks?.name,
     value: Number(v.traded_value),
   }));
 }
@@ -195,6 +197,7 @@ export async function getBestPEStocks(limit = 5) {
 
   return pe.map(p => ({
     ticker: p.stocks?.ticker,
+    name: p.stocks?.name,
     pe: Number(p.pe_ratio),
   }));
 }

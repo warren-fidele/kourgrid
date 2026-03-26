@@ -77,7 +77,7 @@ export default async function Dashboard() {
                         <TableCell className="font-mono font-bold text-[10px] py-2 px-3">
                           <Link href={`/company/${item.ticker}`} className="flex items-center gap-2">
                             <ChevronRight className="h-2 w-2 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all" />
-                            {item.ticker}
+                            {item.name} ({item.ticker})
                           </Link>
                         </TableCell>
                         <TableCell className={`text-right font-black font-mono text-[10px] py-2 px-3 ${section.color}`}>
