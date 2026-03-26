@@ -1,17 +1,22 @@
-# Stage 1: Build
-FROM node:18-alpine AS builder
+# Stage 1: Install dependencies and build
+FROM node:18-alpine AS deps
 
-# Set working directory
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY prisma ./prisma/
+# Install dependencies based on the preferred package manager
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
 
-# Install dependencies (including dev dependencies for build)
-RUN npm ci
+# Stage 2: Builder
+FROM node:18-alpine AS builder
 
-# Copy source code
+WORKDIR /app
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate Prisma client
@@ -20,11 +25,13 @@ RUN npx prisma generate
 # Build the application
 RUN npm run build
 
-# Stage 2: Production runner
+# Stage 3: Production runner
 FROM node:18-alpine AS runner
 
-# Set working directory
 WORKDIR /app
+
+# Add necessary tools for healthcheck
+RUN apk add --no-cache wget
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
@@ -32,10 +39,10 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy built assets from builder
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
