@@ -5,7 +5,8 @@ import {
   getTopDividendStocks,
   getMostActiveStocks,
   getHighestValueStocks,
-  getBestPEStocks
+  getBestPEStocks,
+  getLatestDataTimestamp
 } from '@/lib/db';
 import {
   Table,

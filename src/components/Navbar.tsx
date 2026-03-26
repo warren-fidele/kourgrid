@@ -37,13 +37,6 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded">
-            <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="font-mono text-[9px] uppercase font-bold text-accent">Live_Data</span>
-          </div>
-        </div>
       </div>
     </nav>
   );

@@ -316,3 +316,34 @@ export async function getCurrencies() {
     handleDbError(error, 'fetch currencies');
   }
 }
+
+export async function getLatestDataTimestamp() {
+  try {
+    // Get the most recent date from any of the historical tables
+    const [quotes, prices, trading] = await Promise.all([
+      prisma.quotes_history.findFirst({
+        orderBy: { date: 'desc' },
+        select: { date: true },
+      }),
+      prisma.prices_history.findFirst({
+        orderBy: { date: 'desc' },
+        select: { date: true },
+      }),
+      prisma.trading_data_history.findFirst({
+        orderBy: { date: 'desc' },
+        select: { date: true },
+      }),
+    ]);
+
+    // Find the most recent date among all three
+    const dates = [quotes?.date, prices?.date, trading?.date].filter((d): d is Date => d !== null && d !== undefined);
+    const latestDate = dates.length > 0 ? new Date(Math.max(...dates.map(d => d.getTime()))) : new Date();
+
+    // Set time to 5:00 PM Mauritius time (UTC+4)
+    latestDate.setHours(17, 0, 0, 0);
+
+    return latestDate;
+  } catch (error) {
+    handleDbError(error, 'fetch latest data timestamp');
+  }
+}
