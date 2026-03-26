@@ -34,7 +34,6 @@ export async function getHistoricalPrices(stockId: number) {
     },
   });
 
-  // Convert Decimal and BigInt to numbers for serialization
   return prices.map((p) => ({
     id: Number(p.id),
     date: p.date ? p.date.toISOString().split('T')[0] : '',
@@ -67,4 +66,84 @@ export async function getTradingData(stockId: number) {
     price_to_nav: data.price_to_nav ? Number(data.price_to_nav) : null,
     date: data.date ? data.date.toISOString().split('T')[0] : null,
   };
+}
+
+export async function getTopGainers(limit = 5) {
+  const gainers = await prisma.quotes_history.findMany({
+    where: {
+      price_change: { gt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { price_change: 'desc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return gainers.map(g => ({
+    ticker: g.stocks?.ticker,
+    name: g.stocks?.name,
+    change: Number(g.price_change),
+    price: Number(g.closing_vwap),
+  }));
+}
+
+export async function getTopLosers(limit = 5) {
+  const losers = await prisma.quotes_history.findMany({
+    where: {
+      price_change: { lt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { price_change: 'asc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return losers.map(l => ({
+    ticker: l.stocks?.ticker,
+    name: l.stocks?.name,
+    change: Number(l.price_change),
+    price: Number(l.closing_vwap),
+  }));
+}
+
+export async function getTopDividendStocks(limit = 5) {
+  const dividends = await prisma.trading_data_history.findMany({
+    where: {
+      dividend_yield: { gt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { dividend_yield: 'desc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return dividends.map(d => ({
+    ticker: d.stocks?.ticker,
+    name: d.stocks?.name,
+    yield: Number(d.dividend_yield),
+  }));
+}
+
+export async function getMarkets() {
+  return await prisma.markets.findMany({
+    orderBy: { name: 'asc' },
+  });
+}
+
+export async function getCurrencies() {
+  return await prisma.currencies.findMany({
+    orderBy: { code: 'asc' },
+  });
 }

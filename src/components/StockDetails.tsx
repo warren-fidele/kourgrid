@@ -31,7 +31,7 @@ export default function StockDetails({ data }: { data: TradingData | null }) {
     { label: 'EPS', value: data.eps?.toFixed(2) },
     { label: 'DPS', value: data.dps?.toFixed(2) },
     { label: 'P/E Ratio', value: data.pe_ratio?.toFixed(2) },
-    { label: 'Dividend Yield', value: data.dividend_yield ? `${(data.dividend_yield * 100).toFixed(2)}%` : null },
+    { label: 'Dividend Yield', value: data.dividend_yield ? `${(data.dividend_yield).toFixed(2)}%` : null },
     { label: 'NAV', value: data.nav?.toFixed(2) },
     { label: 'P/NAV', value: data.price_to_nav?.toFixed(2) },
   ];

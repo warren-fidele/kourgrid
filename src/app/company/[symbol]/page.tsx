@@ -39,9 +39,29 @@ export default async function CompanyPage({ params }: PageProps) {
         </Link>
         <div>
           <h1 className="text-3xl font-bold">{stock.name}</h1>
-          <p className="text-muted-foreground font-mono">{stock.ticker}</p>
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <span className="font-mono font-bold">{stock.ticker}</span>
+            <span>•</span>
+            <span>{stock.markets?.long_name ?? stock.markets?.name}</span>
+            {stock.currencies && (
+              <>
+                <span>•</span>
+                <span>{stock.currencies.name} ({stock.currencies.symbol ?? stock.currencies.code})</span>
+              </>
+            )}
+          </div>
         </div>
       </div>
+
+      {stock.markets?.description && (
+        <Card>
+          <CardContent className="pt-6">
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              <span className="font-bold text-foreground">Market Context:</span> {stock.markets.description}
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 gap-6">
         <Card>
