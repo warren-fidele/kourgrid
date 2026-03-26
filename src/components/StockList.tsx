@@ -20,7 +20,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Search, FilterX, ExternalLink } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
+import { cn } from '@/lib/utils';
 
 interface Stock {
   id: number;
@@ -159,11 +160,15 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
                       </span>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" asChild className="h-7 px-2 hover:bg-primary/10">
-                        <Link href={`/company/${stock.ticker}`}>
-                          <ExternalLink className="h-3 w-3 text-primary" />
-                        </Link>
-                      </Button>
+                      <Link
+                        href={`/company/${stock.ticker}`}
+                        className={cn(
+                          buttonVariants({ variant: 'ghost', size: 'sm' }),
+                          "h-7 px-2 hover:bg-primary/10"
+                        )}
+                      >
+                        <ExternalLink className="h-3 w-3 text-primary" />
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))

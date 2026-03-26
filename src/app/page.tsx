@@ -16,8 +16,9 @@ import {
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronRight, Activity, Zap, Target, BarChart, Banknote, PieChart } from 'lucide-react';
-import * as motion from 'framer-motion/client';
 import { formatValue, formatPercentage } from '@/lib/utils';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -93,12 +94,9 @@ export default async function Dashboard() {
       </header>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 min-h-0 overflow-hidden">
-        {sections.map((section, idx) => (
-          <motion.div 
-            key={section.title} 
-            initial={{ opacity: 0, y: 10 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ delay: idx * 0.05 }}
+        {sections.map((section) => (
+          <div
+            key={section.title}
             className="flex flex-col min-h-0"
           >
             <div className="flex items-center gap-2 mb-1.5 px-1">
@@ -134,9 +132,15 @@ export default async function Dashboard() {
         <div className="text-[9px] font-mono text-muted-foreground uppercase animate-pulse">
           // Data_Refresh_Cycle_Complete //
         </div>
-        <Button variant="outline" size="sm" className="h-7 rounded-none font-mono text-[9px] uppercase border-white/10 hover:bg-white/5" asChild>
-          <Link href="/stocks">Launch Full Terminal <ArrowRight className="h-3 w-3 ml-2" /></Link>
-        </Button>
+        <Link
+          href="/stocks"
+          className={cn(
+            buttonVariants({ variant: 'outline', size: 'sm' }),
+            "h-7 rounded-none font-mono text-[9px] uppercase border-white/10 hover:bg-white/5"
+          )}
+        >
+          Launch Full Terminal <ArrowRight className="h-3 w-3 ml-2" />
+        </Link>
       </footer>
     </div>
   );
