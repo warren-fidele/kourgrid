@@ -1,18 +1,18 @@
 'use client'
 
 import { Card, CardContent } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHeader, TableRow, TableHead } from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Zap, Activity, Target, BarChart, Banknote, PieChart } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 export default function DashboardLoading() {
   const sections = [
-    { title: 'Top_Gainers', icon: Zap, color: 'text-accent' },
-    { title: 'Top_Losers', icon: Activity, color: 'text-destructive' },
-    { title: 'High_Yield', icon: Target, color: 'text-primary' },
-    { title: 'Most_Active', icon: BarChart, color: 'text-blue-400' },
-    { title: 'Top_Value', icon: Banknote, color: 'text-emerald-400' },
-    { title: 'Best_PE', icon: PieChart, color: 'text-orange-400' },
+    { title: 'Top_Gainers' },
+    { title: 'Top_Losers' },
+    { title: 'High_Yield' },
+    { title: 'Most_Active' },
+    { title: 'Top_Value' },
+    { title: 'Best_PE' },
   ]
 
   return (
@@ -31,28 +31,26 @@ export default function DashboardLoading() {
       </header>
 
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 min-h-0 overflow-hidden">
-        {sections.map((section, idx) => (
+        {sections.map((section) => (
           <div key={section.title} className="flex flex-col min-h-0">
             <div className="flex items-center gap-2 mb-1.5 px-1">
-              <section.icon className={`h-3 w-3 ${section.color}`} />
-              <h2 className={`text-[9px] font-mono font-black uppercase tracking-widest ${section.color}`}>
-                {section.title}
-              </h2>
+              <Skeleton className="h-3 w-3" />
+              <Skeleton className="h-2 w-24" />
             </div>
             <Card className="border border-white/5 bg-white/[0.02] overflow-hidden">
               <CardContent className="p-0">
                 <Table>
                   <TableBody>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <TableRow key={i} className="border-b border-white/5">
+                      <TableRow key={i} className="group border-b border-white/5">
                         <TableCell className="font-mono font-bold text-[10px] py-2 px-3">
                           <div className="flex items-center gap-2">
                             <Skeleton className="h-2 w-2" />
-                            <Skeleton className="h-2 w-24" />
+                            <Skeleton className="h-4 w-32" />
                           </div>
                         </TableCell>
                         <TableCell className="text-right font-black font-mono text-[10px] py-2 px-3">
-                          <Skeleton className="h-2 w-16 ml-auto" />
+                          <Skeleton className="h-4 w-16 ml-auto" />
                         </TableCell>
                       </TableRow>
                     ))}

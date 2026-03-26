@@ -27,44 +27,35 @@ export default function StocksPageLoading() {
 
       {/* Table skeleton */}
       <div className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
-        <div className="h-full overflow-y-auto overflow-x-auto">
-          <table className="w-full">
-            <thead className="sticky top-0 bg-background border-b border-white/10">
-              <tr className="hover:bg-transparent">
-                {['Symbol', 'Entity_Name', 'Market_Segment', 'Access'].map((header) => (
-                  <th key={header} className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2 px-3 text-left">
-                    {header === 'Symbol' ? (
-                      <Skeleton className="h-2 w-12 inline-block" />
-                    ) : header === 'Entity_Name' ? (
-                      <Skeleton className="h-2 w-32 inline-block" />
-                    ) : header === 'Market_Segment' ? (
-                      <Skeleton className="h-2 w-24 inline-block" />
-                    ) : (
-                      <Skeleton className="h-2 w-12 inline-block ml-auto" />
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
+        <div className="h-full overflow-y-auto overflow-x-auto scrollbar-hide">
+          <Table>
+            <TableHeader className="sticky top-0 bg-background z-10 border-b border-white/10">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Symbol</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Entity_Name</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Market_Segment</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2 text-right">Access</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {Array.from({ length: 20 }).map((_, i) => (
-                <tr key={i} className="border-b border-white/5 group hover:bg-primary/5">
-                  <td className="font-mono font-black text-primary text-xs py-3 px-3">
-                    <Skeleton className="h-3 w-20" />
-                  </td>
-                  <td className="font-medium text-xs py-3 px-3">
-                    <Skeleton className="h-3 w-48" />
-                  </td>
-                  <td className="py-3 px-3">
-                    <Skeleton className="h-3 w-28" />
-                  </td>
-                  <td className="text-right py-3 px-3">
+                <TableRow key={i} className="group border-b border-white/5 hover:bg-primary/5 transition-colors">
+                  <TableCell className="font-mono font-black text-primary text-xs py-3 px-3">
+                    <Skeleton className="h-4 w-20" />
+                  </TableCell>
+                  <TableCell className="font-medium text-xs py-3 px-3">
+                    <Skeleton className="h-4 w-48" />
+                  </TableCell>
+                  <TableCell className="py-3 px-3">
+                    <Skeleton className="h-4 w-28" />
+                  </TableCell>
+                  <TableCell className="text-right py-3 px-3">
                     <Skeleton className="h-7 w-7 ml-auto" />
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
     </div>
