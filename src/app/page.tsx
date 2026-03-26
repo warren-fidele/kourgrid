@@ -124,7 +124,7 @@ export default async function Dashboard() {
                 </Table>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         ))}
       </div>
 
