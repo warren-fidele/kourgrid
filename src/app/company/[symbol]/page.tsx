@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface PageProps {
   params: {
     symbol: string;
@@ -14,7 +17,7 @@ interface PageProps {
 }
 
 export default async function CompanyPage({ params }: PageProps) {
-  const { symbol } = params;
+  const { symbol } = await params;
   const stock = await getStockByTicker(symbol);
 
   if (!stock) {
@@ -46,7 +49,7 @@ export default async function CompanyPage({ params }: PageProps) {
             <CardTitle>Historical Price Performance</CardTitle>
           </CardHeader>
           <CardContent>
-            <StockChart data={prices} />
+            <StockChart key={symbol} data={prices} />
           </CardContent>
         </Card>
 
