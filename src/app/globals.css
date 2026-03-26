@@ -37,36 +37,36 @@
 }
 
 :root {
-  /* Serious Minimalist Dark Theme */
-  --background: #0a0a0b;
-  --foreground: #fafafa;
-  
-  --card: #111113;
-  --card-foreground: #fafafa;
-  
-  --popover: #111113;
-  --popover-foreground: #fafafa;
-  
-  --primary: #6366f1; /* Sophisticated Indigo */
+  /* Professional Dark Theme - Calm & Futuristic */
+  --background: #0b0c0f;
+  --foreground: #e8e8e8;
+
+  --card: #131417;
+  --card-foreground: #e8e8e8;
+
+  --popover: #131417;
+  --popover-foreground: #e8e8e8;
+
+  --primary: #3b82f6; /* Professional Blue */
   --primary-foreground: #ffffff;
-  
-  --secondary: #27272a;
-  --secondary-foreground: #fafafa;
-  
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  
-  --accent: #10b981; /* Precise Emerald */
+
+  --secondary: #1f2937;
+  --secondary-foreground: #e8e8e8;
+
+  --muted: #1a1a1d;
+  --muted-foreground: #9ca3af;
+
+  --accent: #0ea5e9; /* Sky Blue accent */
   --accent-foreground: #ffffff;
-  
-  --destructive: #ef4444;
+
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #6366f1;
-  
-  --radius: 2px; /* Slight rounding for a "precision instrument" feel */
+
+  --border: #26282c;
+  --input: #26282c;
+  --ring: #3b82f6;
+
+  --radius: 4px; /* Softer, more professional rounding */
 }
 
 @layer base {
@@ -74,22 +74,57 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary overflow-hidden h-screen flex flex-col;
-    background-image: 
-      radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0);
+    @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary h-screen flex flex-col;
+    background-image:
+      radial-gradient(circle at 2px 2px, rgba(255,255,255,0.02) 1px, transparent 0);
     background-size: 24px 24px;
+  }
+}
+
+/* Professional Custom Scrollbar */
+@layer utilities {
+  /* Scrollbar base - vertical */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #4b5563 transparent;
+  }
+
+  /* WebKit browsers (Chrome, Safari, Edge) */
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:active {
+    background: #9ca3af;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
 
 /* Custom "Serious" Utilities */
 @layer utilities {
   .terminal-border {
-    @apply border border-white/5 bg-card/50 backdrop-blur-md;
-  }
-  .data-value {
-    @apply font-mono font-bold tracking-tighter;
-  }
-  .label-muted {
-    @apply text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground;
+    @apply border border-border bg-card/50 backdrop-blur-sm;
   }
 }

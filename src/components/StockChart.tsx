@@ -8,7 +8,6 @@ interface ChartDataPoint {
   date: string;
   price: number;
   volume: number;
-  vwap: number | null;
   high_52w: number | null;
   low_52w: number | null;
   pe_ratio: number | null;
@@ -57,16 +56,17 @@ export default function StockChart({ data }: StockChartProps) {
     const dates = data.map(d => d.date);
     const prices = data.map(d => d.price);
     const volumes = data.map(d => d.volume);
-    const vwaps = data.map(d => d.vwap);
 
-    // Calculate 52-week high/low bands (use first point's stored values for simplicity)
+    // Calculate 52-week high for Y-axis scaling
     const high52 = data[0]?.high_52w || Math.max(...prices);
     const low52 = data[0]?.low_52w || Math.min(...prices);
 
-    // Find price range for Y axis
+    // Find price range for Y axis - include room for 0 and the 52-week high
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
-    const pricePadding = (maxPrice - minPrice) * 0.1;
+    // Use 0 as floor and 52-week high as ceiling with padding
+    const yAxisMin = Math.min(0, minPrice);
+    const yAxisMax = high52 * 1.05; // Add 5% padding above 52-week high
 
     // Find max volume for scaling
     const maxVolume = Math.max(...volumes);
@@ -107,10 +107,8 @@ export default function StockChart({ data }: StockChartProps) {
 
             if (seriesName === 'Volume') {
               html += `<div>${marker} ${seriesName}: ${value ? value.toLocaleString() : 'N/A'}</div>`;
-            } else if (seriesName === 'Price' || seriesName === 'VWAP') {
-              html += `<div>${marker} ${seriesName}: $${value ? value.toFixed(2) : 'N/A'}</div>`;
             } else {
-              html += `<div>${marker} ${seriesName}: ${value ? value.toFixed(2) : 'N/A'}</div>`;
+              html += `<div>${marker} ${seriesName}: $${value ? value.toFixed(2) : 'N/A'}</div>`;
             }
           });
 
@@ -122,14 +120,14 @@ export default function StockChart({ data }: StockChartProps) {
         {
           left: '3%',
           right: '4%',
-          top: '3%',
+          top: '12%',
           height: '65%',
         },
         // Volume grid
         {
           left: '3%',
           right: '4%',
-          top: '72%',
+          top: '79%',
           height: '15%',
         },
       ],
@@ -138,11 +136,11 @@ export default function StockChart({ data }: StockChartProps) {
           type: 'category',
           data: dates,
           gridIndex: 0,
-          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
-          axisTick: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
+          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
+          axisTick: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
           axisLabel: {
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: 9,
+            color: 'rgba(255, 255, 255, 0.6)',
+            fontSize: 10,
             fontFamily: 'monospace',
           },
         },
@@ -150,11 +148,11 @@ export default function StockChart({ data }: StockChartProps) {
           type: 'category',
           data: dates,
           gridIndex: 1,
-          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
-          axisTick: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
+          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
+          axisTick: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
           axisLabel: {
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: 9,
+            color: 'rgba(255, 255, 255, 0.6)',
+            fontSize: 10,
             fontFamily: 'monospace',
           },
           show: false,
@@ -165,16 +163,18 @@ export default function StockChart({ data }: StockChartProps) {
           type: 'value',
           gridIndex: 0,
           scale: true,
+          min: yAxisMin,
+          max: yAxisMax,
           splitLine: {
             lineStyle: {
-              color: 'rgba(255, 255, 255, 0.08)',
+              color: 'rgba(255, 255, 255, 0.06)',
               type: 'dashed',
             },
           },
-          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
+          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
           axisLabel: {
-            color: 'rgba(255, 255, 255, 0.7)',
-            fontSize: 9,
+            color: 'rgba(255, 255, 255, 0.6)',
+            fontSize: 10,
             fontFamily: 'monospace',
             formatter: (value: number) => `$${value.toFixed(2)}`,
           },
@@ -184,9 +184,9 @@ export default function StockChart({ data }: StockChartProps) {
           gridIndex: 1,
           scale: true,
           splitLine: { show: false },
-          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.3)' } },
+          axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.15)' } },
           axisLabel: {
-            color: 'rgba(255, 255, 255, 0.7)',
+            color: 'rgba(255, 255, 255, 0.5)',
             fontSize: 9,
             fontFamily: 'monospace',
             formatter: (value: number) => {
@@ -225,63 +225,86 @@ export default function StockChart({ data }: StockChartProps) {
           },
         },
       ],
+      legend: {
+        data: [
+          { name: 'High', icon: 'line' },
+          { name: 'Low', icon: 'line' },
+          { name: 'Price', icon: 'line' },
+          { name: 'Volume', icon: 'rect' }
+        ],
+        show: true,
+        top: 3,
+        left: 'center',
+        orient: 'horizontal',
+        textStyle: {
+          color: 'rgba(255, 255, 255, 0.9)',
+          fontSize: 10,
+          fontFamily: 'monospace',
+          fontWeight: 'bold',
+        },
+        itemGap: 25,
+        itemWidth: 25,
+        itemHeight: 12,
+        icon: 'roundRect',
+        borderRadius: 4,
+        tooltip: { show: false },
+        emphasis: {
+          textStyle: {
+            color: '#fff',
+          }
+        },
+        selectedMode: true,
+        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        borderColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        padding: [6, 15, 6, 15],
+        // Prevent legend hover from affecting chart series
+        hoverLink: false,
+      },
       series: [
-        // 52-week high band
+        // High line - dashed horizontal at the timeframe max
         {
-          name: '52W High',
+          name: 'High',
           type: 'line',
-          data: data.map(() => high52),
+          color: 'rgba(239, 68, 68, 0.7)',
+          data: Array(dates.length).fill(maxPrice),
           xAxisIndex: 0,
           yAxisIndex: 0,
           symbol: 'none',
           lineStyle: {
-            color: 'rgba(255, 0, 0, 0.3)',
+            color: 'rgba(239, 68, 68, 0.5)',
             type: 'dashed',
-            width: 1,
-          },
-          silent: true,
-          tooltip: { show: false },
-        },
-        // 52-week low band
-        {
-          name: '52W Low',
-          type: 'line',
-          data: data.map(() => low52),
-          xAxisIndex: 0,
-          yAxisIndex: 0,
-          symbol: 'none',
-          lineStyle: {
-            color: 'rgba(255, 0, 0, 0.3)',
-            type: 'dashed',
-            width: 1,
-          },
-          areaStyle: {
-            color: 'rgba(255, 0, 0, 0.05)',
-          },
-          silent: true,
-          tooltip: { show: false },
-        },
-        // VWAP line
-        ...(vwaps.some(v => v !== null) ? [{
-          name: 'VWAP',
-          type: 'line',
-          data: vwaps,
-          xAxisIndex: 0,
-          yAxisIndex: 0,
-          symbol: 'none',
-          smooth: true,
-          lineStyle: {
-            color: 'rgba(255, 215, 0, 0.8)',
             width: 1.5,
           },
+          silent: true,
           tooltip: {
-            formatter: (value: number) => `VWAP: $${value.toFixed(2)}`,
+            formatter: () => `High: $${maxPrice.toFixed(2)}`
           },
-        }] : []),
+        },
+        // Low line - dashed horizontal at the timeframe min
+        {
+          name: 'Low',
+          type: 'line',
+          color: 'rgba(245, 158, 11, 0.7)',
+          data: Array(dates.length).fill(minPrice),
+          xAxisIndex: 0,
+          yAxisIndex: 0,
+          symbol: 'none',
+          lineStyle: {
+            color: 'rgba(245, 158, 11, 0.5)',
+            type: 'dashed',
+            width: 1.5,
+          },
+          silent: true,
+          tooltip: {
+            formatter: () => `Low: $${minPrice.toFixed(2)}`
+          },
+        },
         // Price line
         {
           name: 'Price',
           type: 'line',
+          color: 'rgba(59, 130, 246, 1)',
           data: prices,
           xAxisIndex: 0,
           yAxisIndex: 0,
@@ -291,13 +314,13 @@ export default function StockChart({ data }: StockChartProps) {
           hoverAnimation: true,
           smooth: true,
           lineStyle: {
-            color: 'rgba(0, 242, 255, 0.9)',
+            color: 'rgba(59, 130, 246, 0.8)',
             width: 2,
           },
           itemStyle: {
-            color: 'rgba(0, 242, 255, 1)',
+            color: 'rgba(59, 130, 246, 1)',
             borderWidth: 2,
-            borderColor: '#000',
+            borderColor: '#0b0c0f',
           },
           areaStyle: {
             color: {
@@ -307,18 +330,18 @@ export default function StockChart({ data }: StockChartProps) {
               x2: 0,
               y2: 1,
               colorStops: [
-                { offset: 0, color: 'rgba(0, 242, 255, 0.3)' },
-                { offset: 1, color: 'rgba(0, 242, 255, 0.02)' },
+                { offset: 0, color: 'rgba(59, 130, 246, 0.15)' },
+                { offset: 1, color: 'rgba(59, 130, 246, 0.01)' },
               ],
             },
           },
           emphasis: {
             itemStyle: {
-              color: 'rgba(0, 242, 255, 1)',
+              color: 'rgba(59, 130, 246, 1)',
               borderWidth: 3,
-              borderColor: '#000',
-              shadowColor: 'rgba(0, 242, 255, 0.5)',
-              shadowBlur: 10,
+              borderColor: '#0b0c0f',
+              shadowColor: 'rgba(59, 130, 246, 0.4)',
+              shadowBlur: 8,
             },
           },
         },
@@ -326,6 +349,7 @@ export default function StockChart({ data }: StockChartProps) {
         {
           name: 'Volume',
           type: 'bar',
+          color: 'rgba(100, 180, 255, 0.5)',
           data: volumes,
           xAxisIndex: 1,
           yAxisIndex: 1,
@@ -334,8 +358,8 @@ export default function StockChart({ data }: StockChartProps) {
               const price = prices[params.dataIndex];
               const prevPrice = params.dataIndex > 0 ? prices[params.dataIndex - 1] : price;
               return price >= prevPrice
-                ? 'rgba(0, 242, 255, 0.5)'
-                : 'rgba(255, 50, 50, 0.5)';
+                ? 'rgba(100, 180, 255, 0.5)'
+                : 'rgba(239, 68, 68, 0.5)';
             },
             borderRadius: [2, 2, 0, 0],
           },
@@ -345,8 +369,8 @@ export default function StockChart({ data }: StockChartProps) {
                 const price = prices[params.dataIndex];
                 const prevPrice = params.dataIndex > 0 ? prices[params.dataIndex - 1] : price;
                 return price >= prevPrice
-                  ? 'rgba(0, 242, 255, 0.8)'
-                  : 'rgba(255, 50, 50, 0.8)';
+                  ? 'rgba(100, 180, 255, 0.8)'
+                  : 'rgba(239, 68, 68, 0.8)';
               },
             },
           },

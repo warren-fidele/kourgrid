@@ -7,49 +7,47 @@ import { ChevronRight } from 'lucide-react'
 
 export default function DashboardLoading() {
   const sections = [
-    { title: 'Top_Gainers' },
-    { title: 'Top_Losers' },
-    { title: 'High_Yield' },
-    { title: 'Most_Active' },
-    { title: 'Top_Value' },
-    { title: 'Best_PE' },
+    { title: 'Top Gainers' },
+    { title: 'Top Losers' },
+    { title: 'High Yield' },
+    { title: 'Most Active' },
+    { title: 'Top Value' },
+    { title: 'Best PE' },
   ]
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4 overflow-hidden">
-      <header className="flex items-end justify-between border-b border-white/5 pb-2">
+    <div className="container mx-auto p-4 flex flex-col space-y-4 min-h-0 h-full">
+      <header className="flex items-end justify-between border-b border-border pb-3">
         <div className="space-y-1">
-          <h1 className="text-lg font-bold tracking-tighter uppercase font-mono">Market_Intelligence_Terminal</h1>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">
-            // High_Density_Analytics // System_Status: Loading...
-          </p>
+          <h1 className="text-lg font-semibold tracking-tight">KourGrid</h1>
+          <p className="text-sm text-muted-foreground">Loading market data...</p>
         </div>
-        <div className="hidden sm:flex text-[10px] font-mono text-muted-foreground uppercase gap-4">
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-3 w-20" />
+        <div className="hidden sm:flex gap-4">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-20" />
         </div>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 min-h-0 overflow-hidden">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 min-h-0 overflow-hidden">
         {sections.map((section) => (
           <div key={section.title} className="flex flex-col min-h-0">
-            <div className="flex items-center gap-2 mb-1.5 px-1">
-              <Skeleton className="h-3 w-3" />
-              <Skeleton className="h-2 w-24" />
+            <div className="flex items-center gap-2 mb-3">
+              <Skeleton className="h-4 w-4" />
+              <Skeleton className="h-4 w-32" />
             </div>
-            <Card className="border border-white/5 bg-white/[0.02] overflow-hidden">
+            <Card className="border border-border bg-card flex-grow overflow-hidden">
               <CardContent className="p-0">
                 <Table>
                   <TableBody>
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <TableRow key={i} className="group border-b border-white/5">
-                        <TableCell className="font-mono font-bold text-[10px] py-2 px-3">
+                      <TableRow key={i} className="border-b border-border">
+                        <TableCell className="py-3 px-4">
                           <div className="flex items-center gap-2">
-                            <Skeleton className="h-2 w-2" />
+                            <Skeleton className="h-3 w-3" />
                             <Skeleton className="h-4 w-32" />
                           </div>
                         </TableCell>
-                        <TableCell className="text-right font-black font-mono text-[10px] py-2 px-3">
+                        <TableCell className="text-right py-3 px-4">
                           <Skeleton className="h-4 w-16 ml-auto" />
                         </TableCell>
                       </TableRow>
@@ -62,10 +60,8 @@ export default function DashboardLoading() {
         ))}
       </div>
 
-      <footer className="flex justify-between items-center border-t border-white/5 pt-2">
-        <div className="text-[9px] font-mono text-muted-foreground uppercase animate-pulse">
-          // Loading Data...
-        </div>
+      <footer className="flex justify-between items-center border-t border-border pt-3">
+        <Skeleton className="h-4 w-40" />
       </footer>
     </div>
   )

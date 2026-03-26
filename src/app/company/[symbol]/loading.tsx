@@ -7,19 +7,19 @@ import { ArrowLeft, Globe, Info } from 'lucide-react'
 
 export default function CompanyPageLoading() {
   return (
-    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4 overflow-hidden">
+    <div className="container mx-auto p-4 flex flex-col space-y-4 min-h-0 h-full">
       {/* Header skeleton */}
-      <header className="flex items-center justify-between border-b border-white/5 pb-2">
+      <header className="flex items-center justify-between border-b border-border pb-3">
         <div className="flex items-center gap-4">
-          <Skeleton className="h-8 w-8" />
+          <Skeleton className="h-9 w-9" />
           <div className="flex flex-col gap-1">
             <Skeleton className="h-5 w-48" />
             <div className="flex items-center gap-2">
-              <Skeleton className="h-2 w-20" />
-              <Skeleton className="h-2 w-3" />
-              <Skeleton className="h-2 w-16" />
-              <Skeleton className="h-2 w-3" />
-              <Skeleton className="h-2 w-12" />
+              <Skeleton className="h-3 w-20" />
+              <Skeleton className="h-3 w-3" />
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-3 w-3" />
+              <Skeleton className="h-3 w-12" />
             </div>
           </div>
         </div>
@@ -28,11 +28,11 @@ export default function CompanyPageLoading() {
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-0">
         {/* Analytics Section */}
         <div className="lg:col-span-8 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Info className="h-3 w-3 text-primary" />
-            <Skeleton className="h-2 w-36" />
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="h-4 w-4 text-primary" />
+            <Skeleton className="h-4 w-36" />
           </div>
-          <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
+          <Card className="flex-grow border border-border bg-card min-h-0 overflow-hidden">
             <CardContent className="p-4 h-full flex items-center justify-center">
               <div className="w-full space-y-4">
                 <Skeleton className="h-4 w-32" />
@@ -47,16 +47,16 @@ export default function CompanyPageLoading() {
           </Card>
         </div>
 
-        {/* Fundamental HUD */}
+        {/* Fundamentals Section */}
         <div className="lg:col-span-4 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Info className="h-3 w-3 text-primary" />
-            <Skeleton className="h-2 w-32" />
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="h-4 w-4 text-primary" />
+            <Skeleton className="h-4 w-32" />
           </div>
-          <div className="flex-grow min-h-0 overflow-y-auto space-y-1">
+          <div className="flex-grow min-h-0 overflow-y-auto space-y-2 scrollbar-thin">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="flex items-center justify-between p-3 border border-white/5 bg-white/[0.02]">
-                <Skeleton className="h-2 w-24" />
+              <div key={i} className="flex items-center justify-between p-3 border border-border bg-card/50">
+                <Skeleton className="h-4 w-24" />
                 <Skeleton className="h-4 w-16" />
               </div>
             ))}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background transparent -->
+
+  <!-- Grid pattern - represents systematic analysis -->
+  <g stroke="#3b82f6" stroke-width="1.5" opacity="0.15">
+    <!-- Vertical grid lines -->
+    <line x1="40" y1="20" x2="40" y2="180" />
+    <line x1="100" y1="20" x2="100" y2="180" />
+    <line x1="160" y1="20" x2="160" y2="180" />
+    <!-- Horizontal grid lines -->
+    <line x1="20" y1="60" x2="180" y2="60" />
+    <line x1="20" y1="100" x2="180" y2="100" />
+    <line x1="20" y1="140" x2="180" y2="140" />
+  </g>
+
+  <!-- Bold "K" monogram - styled to suggest grid/structure -->
+  <g fill="#3b82f6">
+    <path d="M 70 40 L 70 160 L 90 160 L 90 110 L 130 155 L 150 155 L 100 105 L 150 55 L 130 55 L 90 98 L 90 40 Z" />
+  </g>
+
+  <!-- Accent: Rising arrow at top right - symbolizing growth/upward trend -->
+  <path d="M 160 35 L 175 50 L 145 50 Z" fill="#0ea5e9" opacity="0.8" />
+</svg>

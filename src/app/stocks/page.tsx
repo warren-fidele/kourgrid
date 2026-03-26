@@ -12,12 +12,14 @@ export default async function StocksPage() {
   ]);
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col min-h-0">
-      <StockList 
-        initialStocks={stocks} 
-        markets={markets} 
-        currencies={currencies} 
-      />
+    <div className="container mx-auto p-4 flex flex-col min-h-0 h-full">
+      <div className="flex flex-col min-h-0">
+        <StockList
+          initialStocks={stocks}
+          markets={markets}
+          currencies={currencies}
+        />
+      </div>
     </div>
   );
 }

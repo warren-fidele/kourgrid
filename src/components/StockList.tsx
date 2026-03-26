@@ -87,25 +87,25 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
 
   return (
     <div className="flex flex-col h-full space-y-4 min-h-0">
-      {/* High Density Toolbar */}
-      <div className="flex flex-wrap items-center gap-4 bg-white/[0.02] border border-white/5 p-2">
+      {/* Toolbar */}
+      <div className="flex flex-wrap items-center gap-4 bg-muted/30 border border-border p-3">
         <div className="flex-grow max-w-sm relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search Terminal..."
-            className="pl-8 h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase tracking-widest focus:ring-1 focus:ring-primary"
+            placeholder="Search..."
+            className="pl-10 h-10 rounded-md border-border bg-background text-sm focus:ring-1 focus:ring-primary"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Market:</span>
+          <span className="text-sm font-medium text-muted-foreground">Market:</span>
           <Select value={selectedMarket} onValueChange={(value) => { if (value) setSelectedMarket(value); }}>
-            <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[140px]">
+            <SelectTrigger className="h-10 w-[160px] rounded-md border-border bg-background text-sm">
               <SelectValue>{() => selectedMarketLabel}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
+            <SelectContent className="rounded-md border-border bg-popover">
               <SelectItem value="all">All Markets</SelectItem>
               {markets.map((market) => (
                 <SelectItem key={market.id} value={market.id.toString()}>
@@ -117,12 +117,12 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Cur:</span>
+          <span className="text-sm font-medium text-muted-foreground">Currency:</span>
           <Select value={selectedCurrency} onValueChange={(value) => { if (value) setSelectedCurrency(value); }}>
-            <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[100px]">
+            <SelectTrigger className="h-10 w-[120px] rounded-md border-border bg-background text-sm">
               <SelectValue>{() => selectedCurrencyLabel}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
+            <SelectContent className="rounded-md border-border bg-popover">
               <SelectItem value="all">All</SelectItem>
               {currencies.map((currency) => (
                 <SelectItem key={currency.id} value={currency.id.toString()}>
@@ -134,60 +134,61 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
         </div>
 
         {(searchTerm || selectedMarket !== 'all' || selectedCurrency !== 'all') && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={clearFilters} 
-            className="h-8 text-[9px] font-mono uppercase tracking-tighter text-destructive hover:bg-destructive/10"
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="h-8 text-sm text-destructive hover:bg-destructive/10"
           >
-            <FilterX className="h-3 w-3 mr-1" /> Clear
+            <FilterX className="h-4 w-4 mr-1" /> Clear
           </Button>
         )}
       </div>
 
-      {/* High Density Table Area */}
-      <div className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
-        <div className="h-full overflow-y-auto overflow-x-auto scrollbar-hide">
+      {/* Table Area */}
+      <div className="flex-grow border border-border bg-card min-h-0 overflow-hidden rounded-md">
+        <div className="h-full overflow-y-auto overflow-x-auto scrollbar-thin">
           <Table>
-            <TableHeader className="sticky top-0 bg-background z-10 border-b border-white/10">
+            <TableHeader className="sticky top-0 bg-muted/50 z-10 border-b border-border">
               <TableRow className="hover:bg-transparent">
-                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Symbol</TableHead>
-                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Entity_Name</TableHead>
-                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Market_Segment</TableHead>
-                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2 text-right">Access</TableHead>
+                <TableHead className="text-xs font-semibold text-foreground py-3 px-4">Symbol</TableHead>
+                <TableHead className="text-xs font-semibold text-foreground py-3 px-4">Entity Name</TableHead>
+                <TableHead className="text-xs font-semibold text-foreground py-3 px-4">Market Segment</TableHead>
+                <TableHead className="text-xs font-semibold text-foreground py-3 px-4 text-right">Access</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredStocks.length > 0 ? (
                 filteredStocks.map((stock) => (
-                  <TableRow key={stock.id} className="group border-b border-white/5 hover:bg-primary/5 transition-colors">
-                    <TableCell className="font-mono font-black text-primary text-xs py-3">{stock.ticker}</TableCell>
-                    <TableCell className="font-medium text-xs">{stock.name}</TableCell>
-                    <TableCell>
-                      <span className="text-[10px] font-mono font-bold text-muted-foreground">
-                        {stock.markets?.name ?? '—'}
-                      </span>
+                  <TableRow key={stock.id} className="group border-b border-border hover:bg-muted/30 transition-colors">
+                    <TableCell className="font-mono font-medium text-primary py-3 px-4">
+                      <span className="mr-2 text-xs text-muted-foreground">▸</span>
+                      {stock.ticker}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="font-medium text-sm text-foreground py-3 px-4">{stock.name}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground py-3 px-4">
+                      {stock.markets?.name ?? '—'}
+                    </TableCell>
+                    <TableCell className="text-right py-3 px-4">
                       <Link
                         href={`/company/${stock.ticker}`}
                         className={cn(
-                          // Ghost-like button styling
-                          "inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                          "h-7 w-7 p-0 hover:bg-primary/10",
+                          "inline-flex items-center justify-center rounded-md transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                          "h-8 w-8 p-0 hover:bg-primary/10",
                           "text-muted-foreground hover:text-primary"
                         )}
                       >
-                        <ExternalLink className="h-3 w-3 text-primary" />
+                        <ExternalLink className="h-4 w-4" />
                       </Link>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-48 text-center">
-                    <div className="flex flex-col items-center justify-center space-y-2 opacity-50">
-                      <p className="font-mono text-[10px] font-bold uppercase tracking-widest">No_Results_Found</p>
+                  <TableCell colSpan={4} className="h-64 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-3 text-muted-foreground">
+                      <p className="text-sm font-medium">No results found</p>
+                      <p className="text-xs">Try adjusting your search or filters</p>
                     </div>
                   </TableCell>
                 </TableRow>

@@ -94,7 +94,6 @@ export async function getChartData(stockId: number) {
         date,
         price: Number(priceMap.get(date) ?? 0),
         volume: Number(quoteMap.get(date)?.volume ?? 0),
-        vwap: Number(quoteMap.get(date)?.closing_vwap ?? null),
         high_52w: Number(tradingMap.get(date)?.high_52w ?? null),
         low_52w: Number(tradingMap.get(date)?.low_52w ?? null),
         pe_ratio: Number(tradingMap.get(date)?.pe_ratio ?? null),
@@ -141,14 +140,17 @@ export async function getTradingData(stockId: number) {
 
 export async function getTopGainers(limit = 5) {
   try {
+    // Get today's date as a Date object (will be compared as DATE in DB)
+    const today = new Date();
+
     const gainers = await prisma.quotes_history.findMany({
       where: {
-        price_change: { gt: 0 },
+        date: today,
+        price_change: { not: null, gt: 0 },
       },
-      orderBy: [
-        { date: 'desc' },
-        { price_change: 'desc' },
-      ],
+      orderBy: {
+        price_change: 'desc',
+      },
       take: limit,
       include: {
         stocks: true,
@@ -168,14 +170,17 @@ export async function getTopGainers(limit = 5) {
 
 export async function getTopLosers(limit = 5) {
   try {
+    // Get today's date as a Date object (will be compared as DATE in DB)
+    const today = new Date();
+
     const losers = await prisma.quotes_history.findMany({
       where: {
-        price_change: { lt: 0 },
+        date: today,
+        price_change: { not: null, lt: 0 },
       },
-      orderBy: [
-        { date: 'desc' },
-        { price_change: 'asc' },
-      ],
+      orderBy: {
+        price_change: 'asc',
+      },
       take: limit,
       include: {
         stocks: true,

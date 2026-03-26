@@ -31,23 +31,23 @@ export default async function CompanyPage({ params }: PageProps) {
   ]);
 
   return (
-    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4 overflow-hidden">
-      {/* HUD Header */}
-      <header className="flex items-center justify-between border-b border-white/5 pb-2">
+    <div className="container mx-auto p-4 flex flex-col space-y-4 min-h-0 h-full">
+      {/* Header */}
+      <header className="flex items-center justify-between border-b border-border pb-3">
         <div className="flex items-center gap-4">
           <Link href="/stocks">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-none hover:bg-white/5">
+            <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-md hover:bg-muted">
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
           <div className="flex flex-col">
-            <h1 className="text-lg font-bold uppercase tracking-tight font-mono">{stock.name}</h1>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground uppercase">
-              <span className="text-primary font-black">{stock.ticker}</span>
-              <span>//</span>
-              <Globe className="h-3 w-3" />
+            <h1 className="text-lg font-semibold tracking-tight">{stock.name}</h1>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span className="font-mono font-medium text-primary">{stock.ticker}</span>
+              <span className="text-muted-foreground/50">|</span>
+              <Globe className="h-3.5 w-3.5" />
               <span>{stock.markets?.name}</span>
-              <span>//</span>
+              <span className="text-muted-foreground/50">|</span>
               <span>{stock.currencies?.code} ({stock.currencies?.symbol})</span>
             </div>
           </div>
@@ -57,32 +57,32 @@ export default async function CompanyPage({ params }: PageProps) {
       <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-0">
         {/* Analytics Section */}
         <div className="lg:col-span-8 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Info className="h-3 w-3 text-primary" />
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-primary">Performance_Analytics</span>
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">Performance Analytics</span>
           </div>
-          <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
+          <Card className="flex-grow border border-border bg-card min-h-0 overflow-hidden">
             <CardContent className="p-4 h-full">
               <StockChart key={symbol} data={chartData} />
             </CardContent>
           </Card>
-          
+
           {stock.markets?.description && (
-            <div className="mt-4 p-3 bg-white/[0.02] border border-white/5">
-              <p className="text-[10px] font-mono text-muted-foreground leading-relaxed uppercase">
-                <span className="text-foreground font-bold">[Market_Intel]</span> {stock.markets.description}
+            <div className="mt-4 p-4 bg-muted/30 border border-border">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                <span className="font-semibold text-foreground">Market Intel:</span> {stock.markets.description}
               </p>
             </div>
           )}
         </div>
 
-        {/* Fundamental HUD */}
+        {/* Fundamentals Section */}
         <div className="lg:col-span-4 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Info className="h-3 w-3 text-primary" />
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-primary">System_Fundamentals</span>
+          <div className="flex items-center gap-2 mb-3">
+            <Info className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-primary">Fundamentals</span>
           </div>
-          <div className="flex-grow min-h-0 overflow-y-auto scrollbar-hide">
+          <div className="flex-grow min-h-0 overflow-y-auto scrollbar-thin">
             <StockDetails key={`details-${symbol}`} data={tradingData} />
           </div>
         </div>

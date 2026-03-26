@@ -1,39 +1,40 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Navbar() {
   return (
-    <nav className="z-50 border-b border-white/5 bg-background/80 backdrop-blur-md">
-      <div className="container mx-auto flex h-14 items-center justify-between px-4">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="group flex items-center space-x-2">
-            <div className="flex h-7 w-7 items-center justify-center bg-primary text-black font-black text-xs">
-              PM
+    <nav className="z-50 border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="group flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center">
+              <Image src="/icon.svg" alt="KourGrid" width="32" height="32" />
             </div>
-            <span className="text-xs font-mono font-bold uppercase tracking-widest hidden sm:inline-block">
-              Portfolio_Terminal
+            <span className="text-lg font-semibold tracking-tight hidden sm:inline-block">
+              KourGrid
             </span>
           </Link>
-          
-          <div className="h-4 w-px bg-white/10 hidden sm:block" />
-          
-          <div className="flex gap-6">
+
+          <div className="h-4 w-px bg-border hidden sm:block" />
+
+          <div className="flex gap-1">
             <Link
               href="/"
-              className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
             >
               Dashboard
             </Link>
             <Link
               href="/stocks"
-              className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
             >
               Terminal
             </Link>
             <Link
               href="/about"
-              className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors"
+              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded transition-colors"
             >
-              Intel
+              About
             </Link>
           </div>
         </div>
