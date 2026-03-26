@@ -56,19 +56,28 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
 
   const filteredStocks = useMemo(() => {
     return initialStocks.filter((stock) => {
-      const matchesSearch = 
+      const matchesSearch =
         (stock.name?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false) ||
         (stock.ticker?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
-      
-      const matchesMarket = 
+
+      const matchesMarket =
         selectedMarket === 'all' || stock.market_id?.toString() === selectedMarket;
-      
-      const matchesCurrency = 
+
+      const matchesCurrency =
         selectedCurrency === 'all' || stock.currencies_id?.toString() === selectedCurrency;
 
       return matchesSearch && matchesMarket && matchesCurrency;
     });
   }, [searchTerm, selectedMarket, selectedCurrency, initialStocks]);
+
+  // Get display labels for selected filters
+  const selectedMarketLabel = selectedMarket === 'all'
+    ? 'All Markets'
+    : markets.find(m => m.id.toString() === selectedMarket)?.name || '';
+
+  const selectedCurrencyLabel = selectedCurrency === 'all'
+    ? 'All'
+    : currencies.find(c => c.id.toString() === selectedCurrency)?.code || '';
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -94,7 +103,7 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
           <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Market:</span>
           <Select value={selectedMarket} onValueChange={(value) => { if (value) setSelectedMarket(value); }}>
             <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[140px]">
-              <SelectValue />
+              <SelectValue>{() => selectedMarketLabel}</SelectValue>
             </SelectTrigger>
             <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
               <SelectItem value="all">All Markets</SelectItem>
@@ -111,7 +120,7 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
           <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Cur:</span>
           <Select value={selectedCurrency} onValueChange={(value) => { if (value) setSelectedCurrency(value); }}>
             <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[100px]">
-              <SelectValue />
+              <SelectValue>{() => selectedCurrencyLabel}</SelectValue>
             </SelectTrigger>
             <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
               <SelectItem value="all">All</SelectItem>
