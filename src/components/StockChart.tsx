@@ -39,7 +39,7 @@ export default function StockChart({ data }: { data: StockPrice[] }) {
               const date = new Date(str);
               return date.toLocaleDateString(undefined, {
                 month: 'short',
-                year: '2d',
+                year: '2-digit',
               });
             }}
           />
