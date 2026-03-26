@@ -20,6 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Search, FilterX, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface Stock {
@@ -91,7 +92,7 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
         
         <div className="flex items-center gap-2">
           <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Market:</span>
-          <Select value={selectedMarket} onValueChange={setSelectedMarket}>
+          <Select value={selectedMarket} onValueChange={(value) => { if (value) setSelectedMarket(value); }}>
             <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[140px]">
               <SelectValue />
             </SelectTrigger>
@@ -108,7 +109,7 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
 
         <div className="flex items-center gap-2">
           <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Cur:</span>
-          <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+          <Select value={selectedCurrency} onValueChange={(value) => { if (value) setSelectedCurrency(value); }}>
             <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[100px]">
               <SelectValue />
             </SelectTrigger>

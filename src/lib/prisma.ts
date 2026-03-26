@@ -4,6 +4,7 @@ import { Pool } from 'pg';
 
 const prismaClientSingleton = () => {
   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  // @ts-expect-error - Type mismatch between pg and @prisma/adapter-pg types
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 };

@@ -1,9 +1,7 @@
 'use client'
 
-import StockList from '@/components/StockList'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
-import { Search, FilterX } from 'lucide-react'
 
 export default function StocksPageLoading() {
   return (

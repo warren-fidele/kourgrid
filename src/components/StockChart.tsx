@@ -55,7 +55,7 @@ export default function StockChart({ data }: { data: StockPrice[] }) {
               borderRadius: '8px',
             }}
             labelStyle={{ fontWeight: 'bold', color: 'var(--foreground)' }}
-            formatter={(value: number) => [`$${value.toFixed(2)}`, 'Price']}
+            formatter={(value) => [`$${Number(value).toFixed(2)}`, 'Price']}
           />
           <Line
             type="monotone"

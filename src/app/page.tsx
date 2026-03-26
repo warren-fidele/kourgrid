@@ -37,6 +37,7 @@ export default async function Dashboard() {
       data: gainers,
       icon: Zap,
       color: 'text-accent',
+      field: 'change',
       format: (val: number) => formatValue(val, { prefix: '+' })
     },
     {
@@ -44,6 +45,7 @@ export default async function Dashboard() {
       data: losers,
       icon: Activity,
       color: 'text-destructive',
+      field: 'change',
       format: (val: number) => formatValue(val)
     },
     {
@@ -51,6 +53,7 @@ export default async function Dashboard() {
       data: dividends,
       icon: Target,
       color: 'text-primary',
+      field: 'yield',
       format: (val: number) => formatPercentage(val)
     },
     {
@@ -58,6 +61,7 @@ export default async function Dashboard() {
       data: active,
       icon: BarChart,
       color: 'text-blue-400',
+      field: 'volume',
       format: (val: number) => formatValue(val, { abbrThreshold: 1000 })
     },
     {
@@ -65,6 +69,7 @@ export default async function Dashboard() {
       data: value,
       icon: Banknote,
       color: 'text-emerald-400',
+      field: 'value',
       format: (val: number) => formatValue(val, { abbrThreshold: 1000 })
     },
     {
@@ -72,6 +77,7 @@ export default async function Dashboard() {
       data: pe,
       icon: PieChart,
       color: 'text-orange-400',
+      field: 'pe',
       format: (val: number) => formatValue(val, { abbrThreshold: 1 }) // No abbreviation for PE
     },
   ];
@@ -114,7 +120,7 @@ export default async function Dashboard() {
                           </Link>
                         </TableCell>
                         <TableCell className={`text-right font-black font-mono text-[10px] py-2 px-3 ${section.color}`}>
-                          {section.format(item[section.key] as number)}
+                          {section.format((item as any)[section.field])}
                         </TableCell>
                       </TableRow>
                     ))}
