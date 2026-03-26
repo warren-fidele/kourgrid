@@ -136,6 +136,69 @@ export async function getTopDividendStocks(limit = 5) {
   }));
 }
 
+export async function getMostActiveStocks(limit = 5) {
+  const active = await prisma.quotes_history.findMany({
+    where: {
+      volume: { gt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { volume: 'desc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return active.map(a => ({
+    ticker: a.stocks?.ticker,
+    volume: Number(a.volume),
+  }));
+}
+
+export async function getHighestValueStocks(limit = 5) {
+  const value = await prisma.quotes_history.findMany({
+    where: {
+      traded_value: { gt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { traded_value: 'desc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return value.map(v => ({
+    ticker: v.stocks?.ticker,
+    value: Number(v.traded_value),
+  }));
+}
+
+export async function getBestPEStocks(limit = 5) {
+  const pe = await prisma.trading_data_history.findMany({
+    where: {
+      pe_ratio: { gt: 0 },
+    },
+    orderBy: [
+      { date: 'desc' },
+      { pe_ratio: 'asc' },
+    ],
+    take: limit,
+    include: {
+      stocks: true,
+    },
+  });
+
+  return pe.map(p => ({
+    ticker: p.stocks?.ticker,
+    pe: Number(p.pe_ratio),
+  }));
+}
+
 export async function getMarkets() {
   return await prisma.markets.findMany({
     orderBy: { name: 'asc' },

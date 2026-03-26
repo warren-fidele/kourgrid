@@ -1,134 +1,103 @@
 import Link from 'next/link';
-import { getTopGainers, getTopLosers, getTopDividendStocks } from '@/lib/db';
+import { 
+  getTopGainers, 
+  getTopLosers, 
+  getTopDividendStocks,
+  getMostActiveStocks,
+  getHighestValueStocks,
+  getBestPEStocks
+} from '@/lib/db';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronRight, Activity, Zap, Target } from 'lucide-react';
+import { ArrowRight, ChevronRight, Activity, Zap, Target, BarChart, Banknote, PieChart } from 'lucide-react';
 import * as motion from 'framer-motion/client';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function Dashboard() {
-  const [gainers, losers, dividends] = await Promise.all([
-    getTopGainers(6),
-    getTopLosers(6),
-    getTopDividendStocks(6),
+  const [gainers, losers, dividends, active, value, pe] = await Promise.all([
+    getTopGainers(5),
+    getTopLosers(5),
+    getTopDividendStocks(5),
+    getMostActiveStocks(5),
+    getHighestValueStocks(5),
+    getBestPEStocks(5)
   ]);
 
+  const sections = [
+    { title: 'Top_Gainers', data: gainers, icon: Zap, color: 'text-accent', key: 'change', prefix: '+' },
+    { title: 'Top_Losers', data: losers, icon: Activity, color: 'text-destructive', key: 'change' },
+    { title: 'High_Yield', data: dividends, icon: Target, color: 'text-primary', key: 'yield', suffix: '%' },
+    { title: 'Most_Active', data: active, icon: BarChart, color: 'text-blue-400', key: 'volume' },
+    { title: 'Top_Value', data: value, icon: Banknote, color: 'text-emerald-400', key: 'value' },
+    { title: 'Best_PE', data: pe, icon: PieChart, color: 'text-orange-400', key: 'pe' },
+  ];
+
   return (
-    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4">
-      <header className="flex items-end justify-between border-b border-white/5 pb-4">
+    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4 overflow-hidden">
+      <header className="flex items-end justify-between border-b border-white/5 pb-2">
         <div className="space-y-1">
-          <h1 className="text-xl font-bold tracking-tighter uppercase font-mono">Market_Intelligence_Terminal</h1>
+          <h1 className="text-lg font-bold tracking-tighter uppercase font-mono">Market_Intelligence_Terminal</h1>
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">
-            // Real-time Analytics // System Status: Nominal
+            // High_Density_Analytics // System_Status: Nominal
           </p>
         </div>
-        <div className="text-[10px] font-mono text-muted-foreground uppercase flex gap-4">
+        <div className="hidden sm:flex text-[10px] font-mono text-muted-foreground uppercase gap-4">
           <span>{new Date().toLocaleDateString()}</span>
           <span>{new Date().toLocaleTimeString()}</span>
         </div>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-0">
-        {/* Top Gainers */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Zap className="h-4 w-4 text-accent" />
-            <h2 className="text-[10px] font-mono font-black uppercase tracking-widest text-accent">Top_Gainers</h2>
-          </div>
-          <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
-            <CardContent className="p-0 h-full overflow-y-auto scrollbar-hide">
-              <Table>
-                <TableBody>
-                  {gainers.map((stock) => (
-                    <TableRow key={stock.ticker} className="group border-b border-white/5 hover:bg-accent/10 transition-colors">
-                      <TableCell className="font-mono font-bold text-[11px] py-3">
-                        <Link href={`/company/${stock.ticker}`} className="flex items-center gap-2">
-                          <ChevronRight className="h-3 w-3 text-accent opacity-0 group-hover:opacity-100 transition-all" />
-                          {stock.ticker}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-right text-accent font-black font-mono text-xs">
-                        +{stock.change.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Top Losers */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Activity className="h-4 w-4 text-destructive" />
-            <h2 className="text-[10px] font-mono font-black uppercase tracking-widest text-destructive">Top_Losers</h2>
-          </div>
-          <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
-            <CardContent className="p-0 h-full overflow-y-auto scrollbar-hide">
-              <Table>
-                <TableBody>
-                  {losers.map((stock) => (
-                    <TableRow key={stock.ticker} className="group border-b border-white/5 hover:bg-destructive/10 transition-colors">
-                      <TableCell className="font-mono font-bold text-[11px] py-3">
-                        <Link href={`/company/${stock.ticker}`} className="flex items-center gap-2">
-                          <ChevronRight className="h-3 w-3 text-destructive opacity-0 group-hover:opacity-100 transition-all" />
-                          {stock.ticker}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-right text-destructive font-black font-mono text-xs">
-                        {stock.change.toFixed(2)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* High Yield */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="h-4 w-4 text-primary" />
-            <h2 className="text-[10px] font-mono font-black uppercase tracking-widest text-primary">High_Yield</h2>
-          </div>
-          <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
-            <CardContent className="p-0 h-full overflow-y-auto scrollbar-hide">
-              <Table>
-                <TableBody>
-                  {dividends.map((stock) => (
-                    <TableRow key={stock.ticker} className="group border-b border-white/5 hover:bg-primary/10 transition-colors">
-                      <TableCell className="font-mono font-bold text-[11px] py-3">
-                        <Link href={`/company/${stock.ticker}`} className="flex items-center gap-2">
-                          <ChevronRight className="h-3 w-3 text-primary opacity-0 group-hover:opacity-100 transition-all" />
-                          {stock.ticker}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="text-right text-primary font-black font-mono text-xs">
-                        {stock.yield.toFixed(2)}%
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </motion.div>
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 min-h-0 overflow-hidden">
+        {sections.map((section, idx) => (
+          <motion.div 
+            key={section.title} 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: idx * 0.05 }}
+            className="flex flex-col min-h-0"
+          >
+            <div className="flex items-center gap-2 mb-1.5 px-1">
+              <section.icon className={`h-3 w-3 ${section.color}`} />
+              <h2 className={`text-[9px] font-mono font-black uppercase tracking-widest ${section.color}`}>{section.title}</h2>
+            </div>
+            <Card className="border border-white/5 bg-white/[0.02] overflow-hidden">
+              <CardContent className="p-0">
+                <Table>
+                  <TableBody>
+                    {section.data.map((item: any) => (
+                      <TableRow key={item.ticker} className="group border-b border-white/5 hover:bg-white/[0.05] transition-colors">
+                        <TableCell className="font-mono font-bold text-[10px] py-2 px-3">
+                          <Link href={`/company/${item.ticker}`} className="flex items-center gap-2">
+                            <ChevronRight className="h-2 w-2 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all" />
+                            {item.ticker}
+                          </Link>
+                        </TableCell>
+                        <TableCell className={`text-right font-black font-mono text-[10px] py-2 px-3 ${section.color}`}>
+                          {section.prefix}{item[section.key] > 1000 ? (item[section.key] / 1000).toFixed(1) + 'K' : item[section.key].toFixed(2)}{section.suffix}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
-      <footer className="flex justify-end gap-2 border-t border-white/5 pt-4">
-        <Button variant="outline" size="sm" className="rounded-none font-mono text-[10px] uppercase border-white/10 hover:bg-white/5" asChild>
+      <footer className="flex justify-between items-center border-t border-white/5 pt-2">
+        <div className="text-[9px] font-mono text-muted-foreground uppercase animate-pulse">
+          // Data_Refresh_Cycle_Complete //
+        </div>
+        <Button variant="outline" size="sm" className="h-7 rounded-none font-mono text-[9px] uppercase border-white/10 hover:bg-white/5" asChild>
           <Link href="/stocks">Launch Full Terminal <ArrowRight className="h-3 w-3 ml-2" /></Link>
         </Button>
       </footer>
