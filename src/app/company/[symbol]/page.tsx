@@ -53,7 +53,7 @@ export default async function CompanyPage({ params }: PageProps) {
           </CardContent>
         </Card>
 
-        <StockDetails data={tradingData} />
+        <StockDetails key={`details-${symbol}`} data={tradingData} />
       </div>
     </div>
   );
