@@ -14,10 +14,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronRight, Activity, Zap, Target, BarChart, Banknote, PieChart } from 'lucide-react';
 import { formatValue, formatPercentage } from '@/lib/utils';
-import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -135,8 +133,14 @@ export default async function Dashboard() {
         <Link
           href="/stocks"
           className={cn(
-            buttonVariants({ variant: 'outline', size: 'sm' }),
-            "h-7 rounded-none font-mono text-[9px] uppercase border-white/10 hover:bg-white/5"
+            // Base button outline styling
+            "inline-flex items-center justify-center rounded-lg border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50",
+            // Outline variant
+            "border-border bg-background hover:bg-muted hover:text-foreground",
+            // Size sm + custom sizing
+            "h-7 px-2.5 text-[0.8rem] gap-1",
+            // Custom terminal styling
+            "rounded-none font-mono text-[9px] uppercase border-white/10 hover:bg-white/5"
           )}
         >
           Launch Full Terminal <ArrowRight className="h-3 w-3 ml-2" />

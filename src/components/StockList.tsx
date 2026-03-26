@@ -20,7 +20,6 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Search, FilterX, ExternalLink } from 'lucide-react';
-import { Button, buttonVariants } from './ui/button';
 import { cn } from '@/lib/utils';
 
 interface Stock {
@@ -163,8 +162,10 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
                       <Link
                         href={`/company/${stock.ticker}`}
                         className={cn(
-                          buttonVariants({ variant: 'ghost', size: 'sm' }),
-                          "h-7 px-2 hover:bg-primary/10"
+                          // Ghost-like button styling
+                          "inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+                          "h-7 w-7 p-0 hover:bg-primary/10",
+                          "text-muted-foreground hover:text-primary"
                         )}
                       >
                         <ExternalLink className="h-3 w-3 text-primary" />
