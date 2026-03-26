@@ -1,4 +1,4 @@
-import { getStockByTicker, getHistoricalPrices, getTradingData } from '@/lib/db';
+import { getStockByTicker, getChartData, getTradingData } from '@/lib/db';
 import StockChart from '@/components/StockChart';
 import StockDetails from '@/components/StockDetails';
 import { Card, CardContent } from '@/components/ui/card';
@@ -25,8 +25,8 @@ export default async function CompanyPage({ params }: PageProps) {
     notFound();
   }
 
-  const [prices, tradingData] = await Promise.all([
-    getHistoricalPrices(stock.id),
+  const [chartData, tradingData] = await Promise.all([
+    getChartData(stock.id),
     getTradingData(stock.id),
   ]);
 
@@ -63,7 +63,7 @@ export default async function CompanyPage({ params }: PageProps) {
           </div>
           <Card className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
             <CardContent className="p-4 h-full">
-              <StockChart key={symbol} data={prices} />
+              <StockChart key={symbol} data={chartData} />
             </CardContent>
           </Card>
           

@@ -58,6 +58,56 @@ export async function getHistoricalPrices(stockId: number) {
   }
 }
 
+export async function getChartData(stockId: number) {
+  try {
+    // Fetch all three data types in parallel
+    const [prices, quotes, trading] = await Promise.all([
+      prisma.prices_history.findMany({
+        where: { stock_id: stockId },
+        orderBy: { date: 'asc' },
+      }),
+      prisma.quotes_history.findMany({
+        where: { stock_id: stockId },
+        orderBy: { date: 'asc' },
+      }),
+      prisma.trading_data_history.findMany({
+        where: { stock_id: stockId },
+        orderBy: { date: 'asc' },
+      }),
+    ]);
+
+    // Create maps for O(1) lookup
+    const priceMap = new Map(prices.map(p => [p.date?.toISOString().split('T')[0] || '', p.price || 0]));
+    const quoteMap = new Map(quotes.map(q => [q.date?.toISOString().split('T')[0] || '', q]));
+    const tradingMap = new Map(trading.map(t => [t.date?.toISOString().split('T')[0] || '', t]));
+
+    // Get all unique dates from any source
+    const allDates = new Set<string>();
+    prices.forEach(p => p.date && allDates.add(p.date.toISOString().split('T')[0]));
+    quotes.forEach(q => q.date && allDates.add(q.date.toISOString().split('T')[0]));
+    trading.forEach(t => t.date && allDates.add(t.date.toISOString().split('T')[0]));
+
+    // Build merged data array sorted by date
+    const chartData = Array.from(allDates)
+      .sort()
+      .map(date => ({
+        date,
+        price: Number(priceMap.get(date) ?? 0),
+        volume: Number(quoteMap.get(date)?.volume ?? 0),
+        vwap: Number(quoteMap.get(date)?.closing_vwap ?? null),
+        high_52w: Number(tradingMap.get(date)?.high_52w ?? null),
+        low_52w: Number(tradingMap.get(date)?.low_52w ?? null),
+        pe_ratio: Number(tradingMap.get(date)?.pe_ratio ?? null),
+        eps: Number(tradingMap.get(date)?.eps ?? null),
+        dividend_yield: Number(tradingMap.get(date)?.dividend_yield ?? null),
+      }));
+
+    return chartData;
+  } catch (error) {
+    handleDbError(error, `fetch chart data for stock ID ${stockId}`);
+  }
+}
+
 export async function getTradingData(stockId: number) {
   try {
     const data = await prisma.trading_data_history.findFirst({
