@@ -29,11 +29,12 @@ RUN npx prisma generate
 RUN npm run build
 
 # Stage 3: Production runner
-FROM node:18-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
 
 # Add necessary tools for healthcheck
+RUN apk add --no-cache libc6-compat
 RUN apk add --no-cache wget
 
 # Create non-root user
