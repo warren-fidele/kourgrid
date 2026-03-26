@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { 
-  getTopGainers, 
-  getTopLosers, 
+import {
+  getTopGainers,
+  getTopLosers,
   getTopDividendStocks,
   getMostActiveStocks,
   getHighestValueStocks,
@@ -17,6 +17,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronRight, Activity, Zap, Target, BarChart, Banknote, PieChart } from 'lucide-react';
 import * as motion from 'framer-motion/client';
+import { formatValue, formatPercentage } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -32,12 +33,48 @@ export default async function Dashboard() {
   ]);
 
   const sections = [
-    { title: 'Top_Gainers', data: gainers, icon: Zap, color: 'text-accent', key: 'change', prefix: '+' },
-    { title: 'Top_Losers', data: losers, icon: Activity, color: 'text-destructive', key: 'change' },
-    { title: 'High_Yield', data: dividends, icon: Target, color: 'text-primary', key: 'yield', suffix: '%' },
-    { title: 'Most_Active', data: active, icon: BarChart, color: 'text-blue-400', key: 'volume' },
-    { title: 'Top_Value', data: value, icon: Banknote, color: 'text-emerald-400', key: 'value' },
-    { title: 'Best_PE', data: pe, icon: PieChart, color: 'text-orange-400', key: 'pe' },
+    {
+      title: 'Top_Gainers',
+      data: gainers,
+      icon: Zap,
+      color: 'text-accent',
+      format: (val: number) => formatValue(val, { prefix: '+' })
+    },
+    {
+      title: 'Top_Losers',
+      data: losers,
+      icon: Activity,
+      color: 'text-destructive',
+      format: (val: number) => formatValue(val)
+    },
+    {
+      title: 'High_Yield',
+      data: dividends,
+      icon: Target,
+      color: 'text-primary',
+      format: (val: number) => formatPercentage(val)
+    },
+    {
+      title: 'Most_Active',
+      data: active,
+      icon: BarChart,
+      color: 'text-blue-400',
+      format: (val: number) => formatValue(val, { abbrThreshold: 1000 })
+    },
+    {
+      title: 'Top_Value',
+      data: value,
+      icon: Banknote,
+      color: 'text-emerald-400',
+      format: (val: number) => formatValue(val, { abbrThreshold: 1000 })
+    },
+    {
+      title: 'Best_PE',
+      data: pe,
+      icon: PieChart,
+      color: 'text-orange-400',
+      format: (val: number) => formatValue(val, { abbrThreshold: 1 }) // No abbreviation for PE
+    },
   ];
 
   return (
@@ -81,7 +118,7 @@ export default async function Dashboard() {
                           </Link>
                         </TableCell>
                         <TableCell className={`text-right font-black font-mono text-[10px] py-2 px-3 ${section.color}`}>
-                          {section.prefix}{item[section.key] > 1000 ? (item[section.key] / 1000).toFixed(1) + 'K' : item[section.key].toFixed(2)}{section.suffix}
+                          {section.format(item[section.key] as number)}
                         </TableCell>
                       </TableRow>
                     ))}

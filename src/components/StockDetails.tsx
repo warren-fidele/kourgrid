@@ -1,5 +1,6 @@
 import { Card, CardContent } from './ui/card';
 import * as motion from 'framer-motion/client';
+import { formatNumber, formatPercentage } from '@/lib/utils';
 
 interface TradingData {
   high_52w: number | null;
@@ -22,14 +23,14 @@ export default function StockDetails({ data }: { data: TradingData | null }) {
   }
 
   const metrics = [
-    { label: '52W_High', value: data.high_52w?.toFixed(2), color: 'text-accent' },
-    { label: '52W_Low', value: data.low_52w?.toFixed(2), color: 'text-destructive' },
-    { label: 'Earnings_PS', value: data.eps?.toFixed(2), color: 'text-primary' },
-    { label: 'Dividend_PS', value: data.dps?.toFixed(2), color: 'text-primary' },
-    { label: 'PE_Ratio', value: data.pe_ratio?.toFixed(2), color: 'text-primary' },
-    { label: 'Yield_Perc', value: data.dividend_yield ? `${data.dividend_yield.toFixed(2)}%` : '—', color: 'text-primary' },
-    { label: 'Net_Asset_Val', value: data.nav?.toFixed(2), color: 'text-primary' },
-    { label: 'Price_To_NAV', value: data.price_to_nav?.toFixed(2), color: 'text-primary' },
+    { label: '52W_High', value: formatNumber(data.high_52w), color: 'text-accent' },
+    { label: '52W_Low', value: formatNumber(data.low_52w), color: 'text-destructive' },
+    { label: 'Earnings_PS', value: formatNumber(data.eps), color: 'text-primary' },
+    { label: 'Dividend_PS', value: formatNumber(data.dps), color: 'text-primary' },
+    { label: 'PE_Ratio', value: formatNumber(data.pe_ratio), color: 'text-primary' },
+    { label: 'Yield_Perc', value: formatPercentage(data.dividend_yield), color: 'text-primary' },
+    { label: 'Net_Asset_Val', value: formatNumber(data.nav), color: 'text-primary' },
+    { label: 'Price_To_NAV', value: formatNumber(data.price_to_nav), color: 'text-primary' },
   ];
 
   return (
