@@ -6,9 +6,12 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Copy package files
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+COPY prisma ./prisma/
+
+# Install all dependencies (including dev for Prisma) with fallback
+RUN npm ci --only=production=false --no-audit --prefer-offline || npm install --no-audit --prefer-offline
 
 # Stage 2: Builder
 FROM node:18-alpine AS builder
