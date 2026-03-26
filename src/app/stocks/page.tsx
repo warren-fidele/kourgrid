@@ -12,14 +12,7 @@ export default async function StocksPage() {
   ]);
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <div className="space-y-4 mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Market Directory</h1>
-        <p className="text-muted-foreground">
-          Browse and search through all available companies across different markets.
-        </p>
-      </div>
-
+    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col min-h-0">
       <StockList 
         initialStocks={stocks} 
         markets={markets} 

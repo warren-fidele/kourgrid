@@ -1,63 +1,66 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Info, Shield, Zap, Target } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto py-12 px-4 max-w-4xl">
-      <div className="space-y-8 text-center mb-12">
-        <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
-          About Portfolio Manager
-        </h1>
-        <p className="text-xl text-muted-foreground">
-          Empowering investors with data-driven insights and market historical analysis.
-        </p>
-      </div>
+    <div className="h-[calc(100vh-3.5rem)] container mx-auto p-4 flex flex-col space-y-4 overflow-hidden">
+      <header className="border-b border-white/5 pb-2">
+        <h1 className="text-lg font-bold uppercase tracking-tight font-mono">System_Information_Intel</h1>
+        <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">// Portfolio_Terminal_Overview</p>
+      </header>
 
-      <div className="grid gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Our Mission</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p>
-              Portfolio Manager is a specialized financial advisory platform designed to help you 
-              track, analyze, and optimize your investment holdings. Our platform leverages 
-              comprehensive historical data to provide you with a clear picture of market trends 
-              and company fundamentals.
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 min-h-0">
+        <div className="space-y-4 overflow-y-auto pr-2 scrollbar-hide">
+          <div className="p-4 border border-white/5 bg-white/[0.02]">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+              <Target className="h-3 w-3" /> Core_Directive
+            </h2>
+            <p className="text-[11px] font-mono text-muted-foreground leading-relaxed uppercase">
+              Portfolio_Terminal is a specialized financial intelligence platform. 
+              Our directive is to bridge the gap between raw market data and actionable strategy 
+              through high-density analytics and real-time system monitoring.
             </p>
-            <p>
-              We believe that informed decisions are the bedrock of successful investing. By 
-              providing real-time performance tracking and deep-dive historical analysis, 
-              we bridge the gap between complex market data and actionable insights.
-            </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Core Features</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Performance Tracking:</strong> Monitor your unrealized gains and losses against real-time market prices.</li>
-              <li><strong>Historical Analysis:</strong> Visualize years of price history to identify patterns and cycles.</li>
-              <li><strong>Fundamental Metrics:</strong> Access key financial ratios like P/E, EPS, and Dividend Yield at a glance.</li>
-              <li><strong>Market Context:</strong> Understand how companies perform within their specific market segments.</li>
+          <div className="p-4 border border-white/5 bg-white/[0.02]">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+              <Zap className="h-3 w-3" /> System_Capabilities
+            </h2>
+            <ul className="space-y-2 text-[10px] font-mono text-muted-foreground uppercase">
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">[01]</span>
+                <span>Performance_Tracking: Monitor unrealized variance against real-time closing prices.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">[02]</span>
+                <span>Historical_Audit: Deep-dive into year-over-year price performance cycles.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">[03]</span>
+                <span>Fundamental_HUD: Access key financial ratios via the unified command interface.</span>
+              </li>
             </ul>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>The Technology</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>
-              Built on a robust relational database tracking currencies, markets, and stocks, our 
-              platform processes daily automation updates to ensure you always have the latest 
-              closing prices and trading volumes.
+        <div className="p-4 border border-white/5 bg-white/[0.02] flex flex-col justify-between">
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+              <Shield className="h-3 w-3" /> Security_Protocol
+            </h2>
+            <p className="text-[11px] font-mono text-muted-foreground leading-relaxed uppercase">
+              All data is processed through our secure relational database tracking 
+              multi-currency assets and global market segments. Daily automation cycles 
+              ensure information integrity.
             </p>
-          </CardContent>
-        </Card>
+          </div>
+          
+          <div className="pt-8 opacity-20 text-[9px] font-mono space-y-1">
+            <p>BUILD_VERSION: 1.0.4-RELEASE</p>
+            <p>ENCRYPTION: AES-256-BIT</p>
+            <p>ACCESS: GRANTED</p>
+          </div>
+        </div>
       </div>
     </div>
   );

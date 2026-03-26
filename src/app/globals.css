@@ -37,36 +37,36 @@
 }
 
 :root {
-  /* Futuristic Dark Theme by Default */
-  --background: #050505;
-  --foreground: #ffffff;
+  /* Serious Minimalist Dark Theme */
+  --background: #0a0a0b;
+  --foreground: #fafafa;
   
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
+  --card: #111113;
+  --card-foreground: #fafafa;
   
-  --popover: #0a0a0a;
-  --popover-foreground: #ffffff;
+  --popover: #111113;
+  --popover-foreground: #fafafa;
   
-  --primary: #00f2ff; /* Electric Cyan */
-  --primary-foreground: #000000;
+  --primary: #6366f1; /* Sophisticated Indigo */
+  --primary-foreground: #ffffff;
   
-  --secondary: #7000ff; /* Cyber Purple */
-  --secondary-foreground: #ffffff;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
   
-  --muted: #1a1a1a;
+  --muted: #18181b;
   --muted-foreground: #a1a1aa;
   
-  --accent: #adfa1d; /* Neon Lime */
-  --accent-foreground: #000000;
+  --accent: #10b981; /* Precise Emerald */
+  --accent-foreground: #ffffff;
   
-  --destructive: #ff0055;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
   
-  --border: #1f1f1f;
-  --input: #1f1f1f;
-  --ring: #00f2ff;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #6366f1;
   
-  --radius: 0px; /* Sharp corners for futuristic feel */
+  --radius: 2px; /* Slight rounding for a "precision instrument" feel */
 }
 
 @layer base {
@@ -74,26 +74,22 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary;
+    @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary overflow-hidden h-screen flex flex-col;
     background-image: 
-      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
+      radial-gradient(circle at 2px 2px, rgba(255,255,255,0.03) 1px, transparent 0);
+    background-size: 24px 24px;
   }
 }
 
-/* Custom Futuristic Utilities */
+/* Custom "Serious" Utilities */
 @layer utilities {
-  .glow-primary {
-    box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+  .terminal-border {
+    @apply border border-white/5 bg-card/50 backdrop-blur-md;
   }
-  .glow-accent {
-    box-shadow: 0 0 20px rgba(173, 250, 29, 0.2);
+  .data-value {
+    @apply font-mono font-bold tracking-tighter;
   }
-  .text-glow {
-    text-shadow: 0 0 10px currentColor;
-  }
-  .glass-panel {
-    @apply bg-card/40 backdrop-blur-xl border border-white/5;
+  .label-muted {
+    @apply text-[10px] font-mono font-bold uppercase tracking-wider text-muted-foreground;
   }
 }

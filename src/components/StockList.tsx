@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Input } from './ui/input';
 import {
   Select,
@@ -19,8 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Card, CardContent } from '@/components/ui/card';
-import { Search, FilterX, ArrowRight } from 'lucide-react';
+import { Search, FilterX, ExternalLink } from 'lucide-react';
 import { Button } from './ui/button';
 
 interface Stock {
@@ -76,178 +75,111 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
     setSelectedCurrency('all');
   };
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0 }
-  };
-
   return (
-    <div className="space-y-8">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Card className="overflow-hidden border-none shadow-lg bg-card/50 backdrop-blur-sm">
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-              <div className="md:col-span-2 space-y-2">
-                <label className="text-sm font-semibold tracking-tight text-muted-foreground uppercase">Search Assets</label>
-                <div className="relative group">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
-                  <Input
-                    placeholder="Search by name or ticker..."
-                    className="pl-10 h-11 bg-background/50 border-muted-foreground/20 focus-visible:ring-primary transition-all shadow-inner"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-sm font-semibold tracking-tight text-muted-foreground uppercase">Market</label>
-                <Select value={selectedMarket} onValueChange={setSelectedMarket}>
-                  <SelectTrigger className="h-11 bg-background/50 border-muted-foreground/20 focus:ring-primary">
-                    <SelectValue placeholder="All Markets">
-                      {selectedMarket === 'all' ? 'All Markets' : markets.find(m => m.id.toString() === selectedMarket)?.name}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Markets</SelectItem>
-                    {markets.map((market) => (
-                      <SelectItem key={market.id} value={market.id.toString()}>
-                        {market.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+    <div className="flex flex-col h-full space-y-4 min-h-0">
+      {/* High Density Toolbar */}
+      <div className="flex flex-wrap items-center gap-4 bg-white/[0.02] border border-white/5 p-2">
+        <div className="flex-grow max-w-sm relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+          <Input
+            placeholder="Search Terminal..."
+            className="pl-8 h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase tracking-widest focus:ring-1 focus:ring-primary"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Market:</span>
+          <Select value={selectedMarket} onValueChange={setSelectedMarket}>
+            <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
+              <SelectItem value="all">All Markets</SelectItem>
+              {markets.map((market) => (
+                <SelectItem key={market.id} value={market.id.toString()}>
+                  {market.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-              <div className="space-y-2">
-                <label className="text-sm font-semibold tracking-tight text-muted-foreground uppercase">Currency</label>
-                <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
-                  <SelectTrigger className="h-11 bg-background/50 border-muted-foreground/20 focus:ring-primary">
-                    <SelectValue placeholder="All Currencies">
-                      {selectedCurrency === 'all' ? 'All Currencies' : currencies.find(c => c.id.toString() === selectedCurrency)?.code}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Currencies</SelectItem>
-                    {currencies.map((currency) => (
-                      <SelectItem key={currency.id} value={currency.id.toString()}>
-                        {currency.code}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <AnimatePresence>
-              {(searchTerm || selectedMarket !== 'all' || selectedCurrency !== 'all') && (
-                <motion.div 
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 flex justify-end"
-                >
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={clearFilters} 
-                    className="gap-2 text-muted-foreground hover:text-destructive hover:bg-destructive/5"
-                  >
-                    <FilterX className="h-4 w-4" /> Clear All Filters
-                  </Button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </CardContent>
-        </Card>
-      </motion.div>
+        <div className="flex items-center gap-2">
+          <span className="text-[9px] font-mono text-muted-foreground uppercase font-bold">Cur:</span>
+          <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+            <SelectTrigger className="h-8 rounded-none border-white/10 bg-transparent text-[10px] font-mono uppercase w-[100px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-none border-white/10 bg-background font-mono text-xs">
+              <SelectItem value="all">All</SelectItem>
+              {currencies.map((currency) => (
+                <SelectItem key={currency.id} value={currency.id.toString()}>
+                  {currency.code}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-      <Card className="border-none shadow-xl bg-card/30 backdrop-blur-md overflow-hidden">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader className="bg-muted/50">
-                <TableRow className="hover:bg-transparent border-muted">
-                  <TableHead className="w-[120px] font-bold text-foreground">Ticker</TableHead>
-                  <TableHead className="font-bold text-foreground">Company Name</TableHead>
-                  <TableHead className="font-bold text-foreground">Market</TableHead>
-                  <TableHead className="font-bold text-foreground">Currency</TableHead>
-                  <TableHead className="text-right font-bold text-foreground pr-6">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <motion.tbody 
-                variants={container}
-                initial="hidden"
-                animate="show"
-                className="divide-y divide-muted/30"
-              >
-                {filteredStocks.length > 0 ? (
-                  filteredStocks.map((stock) => (
-                    <motion.tr 
-                      key={stock.id}
-                      variants={item}
-                      className="group hover:bg-muted/20 transition-colors"
-                    >
-                      <TableCell className="font-mono font-black text-primary py-4">
-                        <div className="bg-primary/10 px-2 py-1 rounded inline-block">
-                          {stock.ticker}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-medium">{stock.name}</TableCell>
-                      <TableCell>
-                        <span className="px-2 py-1 rounded-full text-xs font-semibold bg-secondary/30 text-secondary-foreground">
-                          {stock.markets?.name ?? 'N/A'}
-                        </span>
-                      </TableCell>
-                      <TableCell>
-                        <span className="font-semibold text-muted-foreground">
-                          {stock.currencies?.code ?? 'N/A'}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right pr-6">
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          asChild
-                          className="group/btn relative overflow-hidden"
-                        >
-                          <Link href={`/company/${stock.ticker}`} className="flex items-center gap-1 group-hover/btn:translate-x-1 transition-transform">
-                            Details <ArrowRight className="h-4 w-4 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                          </Link>
-                        </Button>
-                      </TableCell>
-                    </motion.tr>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={5} className="h-48 text-center">
-                      <div className="flex flex-col items-center justify-center space-y-2 opacity-50">
-                        <Search className="h-10 w-10 mb-2" />
-                        <p className="text-lg font-semibold">No assets match your search</p>
-                        <p className="text-sm">Try adjusting your filters or keyword</p>
-                      </div>
+        {(searchTerm || selectedMarket !== 'all' || selectedCurrency !== 'all') && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearFilters} 
+            className="h-8 text-[9px] font-mono uppercase tracking-tighter text-destructive hover:bg-destructive/10"
+          >
+            <FilterX className="h-3 w-3 mr-1" /> Clear
+          </Button>
+        )}
+      </div>
+
+      {/* High Density Table Area */}
+      <div className="flex-grow border border-white/5 bg-white/[0.02] min-h-0 overflow-hidden">
+        <div className="h-full overflow-y-auto overflow-x-auto scrollbar-hide">
+          <Table>
+            <TableHeader className="sticky top-0 bg-background z-10 border-b border-white/10">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Symbol</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Entity_Name</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2">Market_Segment</TableHead>
+                <TableHead className="text-[10px] font-mono font-bold uppercase tracking-widest text-muted-foreground py-2 text-right">Access</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredStocks.length > 0 ? (
+                filteredStocks.map((stock) => (
+                  <TableRow key={stock.id} className="group border-b border-white/5 hover:bg-primary/5 transition-colors">
+                    <TableCell className="font-mono font-black text-primary text-xs py-3">{stock.ticker}</TableCell>
+                    <TableCell className="font-medium text-xs">{stock.name}</TableCell>
+                    <TableCell>
+                      <span className="text-[10px] font-mono font-bold text-muted-foreground">
+                        {stock.markets?.name ?? '—'}
+                      </span>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="sm" asChild className="h-7 px-2 hover:bg-primary/10">
+                        <Link href={`/company/${stock.ticker}`}>
+                          <ExternalLink className="h-3 w-3 text-primary" />
+                        </Link>
+                      </Button>
                     </TableCell>
                   </TableRow>
-                )}
-              </motion.tbody>
-            </Table>
-          </div>
-        </CardContent>
-      </Card>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="h-48 text-center">
+                    <div className="flex flex-col items-center justify-center space-y-2 opacity-50">
+                      <p className="font-mono text-[10px] font-bold uppercase tracking-widest">No_Results_Found</p>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
     </div>
   );
 }
