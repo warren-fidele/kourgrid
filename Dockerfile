@@ -35,7 +35,6 @@ WORKDIR /app
 
 # Add necessary tools for healthcheck
 RUN apk add --no-cache libc6-compat
-RUN apk add --no-cache wget
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
