@@ -30,11 +30,11 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
       </head>
       <body
-        className={`${spaceGrotesk.variable} ${geistMono.variable} font-sans antialiased min-h-screen flex flex-col overflow-hidden`}
+        className={`${spaceGrotesk.variable} ${geistMono.variable} font-sans antialiased min-h-screen md:h-screen flex flex-col md:overflow-hidden`}
       >
         <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.03),transparent_70%)] pointer-events-none" />
         <Navbar />
-        <main className="flex-grow relative z-10 overflow-hidden">
+        <main className="flex-grow relative z-10 md:overflow-hidden">
           {children}
         </main>
         <footer className="border-t border-border bg-card/80 backdrop-blur-md relative z-10 mt-6">

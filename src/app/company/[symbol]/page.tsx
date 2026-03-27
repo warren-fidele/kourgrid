@@ -31,12 +31,17 @@ export default async function CompanyPage({ params }: PageProps) {
   ]);
 
   return (
-    <div className="container mx-auto p-4 flex flex-col space-y-4 min-h-0 h-full">
+    <div className="container mx-auto p-3 sm:p-4 flex flex-col space-y-3 sm:space-y-4 min-h-0 md:h-full">
       {/* Header */}
       <header className="flex items-center justify-between border-b border-border pb-3">
         <div className="flex items-center gap-4">
           <Link href="/stocks">
-            <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-md hover:bg-muted">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-11 w-11 p-0 rounded-md hover:bg-muted md:h-9 md:w-9"
+              aria-label="Back to stocks"
+            >
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </Link>
@@ -54,36 +59,38 @@ export default async function CompanyPage({ params }: PageProps) {
         </div>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-0">
-        {/* Analytics Section */}
-        <div className="lg:col-span-8 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-3">
-            <Info className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Performance Analytics</span>
-          </div>
-          <Card className="flex-grow border border-border bg-card min-h-0 overflow-hidden">
-            <CardContent className="p-4 h-full">
-              <StockChart key={symbol} data={chartData} />
-            </CardContent>
-          </Card>
-
-          {stock.markets?.description && (
-            <div className="mt-4 p-4 bg-muted/30 border border-border">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                <span className="font-semibold text-foreground">Market Intel:</span> {stock.markets.description}
-              </p>
+      <div className="md:flex-grow md:overflow-y-auto min-h-0">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+          {/* Analytics Section */}
+          <div className="lg:col-span-8 flex flex-col min-h-0">
+            <div className="flex items-center gap-2 mb-3">
+              <Info className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Performance Analytics</span>
             </div>
-          )}
-        </div>
+            <Card className="border border-border bg-card min-h-0">
+              <CardContent className="p-3 sm:p-4 h-full min-h-[50vh] md:min-h-0">
+                <StockChart key={symbol} data={chartData} />
+              </CardContent>
+            </Card>
 
-        {/* Fundamentals Section */}
-        <div className="lg:col-span-4 flex flex-col min-h-0">
-          <div className="flex items-center gap-2 mb-3">
-            <Info className="h-4 w-4 text-primary" />
-            <span className="text-sm font-semibold text-primary">Fundamentals</span>
+            {stock.markets?.description && (
+              <div className="mt-4 p-3 sm:p-4 bg-muted/30 border border-border">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  <span className="font-semibold text-foreground">Market Intel:</span> {stock.markets.description}
+                </p>
+              </div>
+            )}
           </div>
-          <div className="flex-grow min-h-0 overflow-y-auto scrollbar-thin">
-            <StockDetails key={`details-${symbol}`} data={tradingData} />
+
+          {/* Fundamentals Section */}
+          <div className="lg:col-span-4 flex flex-col min-h-0">
+            <div className="flex items-center gap-2 mb-3">
+              <Info className="h-4 w-4 text-primary" />
+              <span className="text-sm font-semibold text-primary">Fundamentals</span>
+            </div>
+            <div className="flex-grow min-h-0 overflow-y-auto scrollbar-thin">
+              <StockDetails key={`details-${symbol}`} data={tradingData} />
+            </div>
           </div>
         </div>
       </div>

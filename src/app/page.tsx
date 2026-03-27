@@ -85,11 +85,11 @@ export default async function Dashboard() {
   ];
 
   return (
-    <div className="container mx-auto p-4 flex flex-col space-y-4 min-h-0 h-full">
+    <div className="container mx-auto p-3 sm:p-4 flex flex-col min-h-0 md:h-full">
       <header className="flex items-end justify-between border-b border-white/5 pb-2">
         <div className="space-y-1">
           <h1 className="text-lg font-semibold tracking-tight">KourGrid</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground hidden sm:block">
             Mauritius Stock Exchange Analytics
           </p>
         </div>
@@ -99,40 +99,42 @@ export default async function Dashboard() {
         </div>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 min-h-0 overflow-y-auto">
-        {sections.map((section) => (
-          <div
-            key={section.title}
-            className="flex flex-col min-h-0"
-          >
-            <div className="flex items-center gap-2 mb-2 px-1">
-              <section.icon className={`h-4 w-4 ${section.color}`} />
-              <h2 className={`text-xs font-semibold tracking-wide ${section.color}`}>{section.title}</h2>
+      <div className="md:flex-grow md:overflow-y-auto min-h-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+          {sections.map((section) => (
+            <div
+              key={section.title}
+              className="flex flex-col"
+            >
+              <div className="flex items-center gap-2 mb-2 px-1">
+                <section.icon className={`h-4 w-4 ${section.color}`} />
+                <h2 className={`text-xs font-semibold tracking-wide ${section.color}`}>{section.title}</h2>
+              </div>
+              <Card className="border border-border bg-card overflow-hidden">
+                <CardContent className="p-0">
+                  <Table>
+                    <TableBody>
+                      {section.data.map((item: any) => (
+                        <TableRow key={item.ticker} className="group border-b border-border hover:bg-muted/50 transition-colors">
+                          <TableCell className="font-medium text-sm py-3 px-4">
+                            <Link href={`/company/${item.ticker}`} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
+                              <ChevronRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all" />
+                              <span className="font-mono text-primary">{item.ticker}</span>
+                              <span className="text-muted-foreground">{item.name}</span>
+                            </Link>
+                          </TableCell>
+                          <TableCell className={`text-right font-semibold font-mono text-sm py-3 px-4 ${section.color}`}>
+                            {section.format((item as any)[section.field])}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </div>
-            <Card className="border border-border bg-card overflow-hidden">
-              <CardContent className="p-0">
-                <Table>
-                  <TableBody>
-                    {section.data.map((item: any) => (
-                      <TableRow key={item.ticker} className="group border-b border-border hover:bg-muted/50 transition-colors">
-                        <TableCell className="font-medium text-sm py-3 px-4">
-                          <Link href={`/company/${item.ticker}`} className="flex items-center gap-2 text-foreground hover:text-primary transition-colors">
-                            <ChevronRight className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all" />
-                            <span className="font-mono text-primary">{item.ticker}</span>
-                            <span className="text-muted-foreground">{item.name}</span>
-                          </Link>
-                        </TableCell>
-                        <TableCell className={`text-right font-semibold font-mono text-sm py-3 px-4 ${section.color}`}>
-                          {section.format((item as any)[section.field])}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <footer className="flex justify-between items-center border-t border-border pt-2">

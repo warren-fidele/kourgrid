@@ -12,8 +12,8 @@ export default async function StocksPage() {
   ]);
 
   return (
-    <div className="container mx-auto p-4 flex flex-col min-h-0 h-full">
-      <div className="flex flex-col min-h-0">
+    <div className="container mx-auto p-3 sm:p-4 flex flex-col min-h-0 md:h-full">
+      <div className="flex flex-col min-h-0 md:flex-grow md:overflow-y-auto">
         <StockList
           initialStocks={stocks}
           markets={markets}

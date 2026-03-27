@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Search, FilterX, ExternalLink } from 'lucide-react';
+import { Search, FilterX, ExternalLink, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -87,8 +87,8 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
 
   return (
     <div className="flex flex-col h-full space-y-4 min-h-0">
-      {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-4 bg-muted/30 border border-border p-3">
+      {/* Toolbar - Desktop */}
+      <div className="hidden md:flex flex-wrap items-center gap-4 bg-muted/30 border border-border p-3">
         <div className="flex-grow max-w-sm relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
@@ -145,8 +145,65 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
         )}
       </div>
 
-      {/* Table Area */}
-      <div className="flex-grow border border-border bg-card min-h-0 overflow-hidden rounded-md">
+      {/* Toolbar - Mobile */}
+      <div className="md:hidden flex flex-col gap-3 bg-muted/30 border border-border p-3">
+        <div className="relative w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search..."
+            className="pl-10 h-11 rounded-md border-border bg-background text-sm focus:ring-1 focus:ring-primary w-full"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <Select value={selectedMarket} onValueChange={(value) => { if (value) setSelectedMarket(value); }}>
+              <SelectTrigger className="h-11 w-full rounded-md border-border bg-background text-sm">
+                <SelectValue>{() => selectedMarketLabel}</SelectValue>
+            </SelectTrigger>
+              <SelectContent className="rounded-md border-border bg-popover">
+                <SelectItem value="all">All Markets</SelectItem>
+                {markets.map((market) => (
+                  <SelectItem key={market.id} value={market.id.toString()}>
+                    {market.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex-1">
+            <Select value={selectedCurrency} onValueChange={(value) => { if (value) setSelectedCurrency(value); }}>
+              <SelectTrigger className="h-11 w-full rounded-md border-border bg-background text-sm">
+                <SelectValue>{() => selectedCurrencyLabel}</SelectValue>
+              </SelectTrigger>
+              <SelectContent className="rounded-md border-border bg-popover">
+                <SelectItem value="all">All</SelectItem>
+                {currencies.map((currency) => (
+                  <SelectItem key={currency.id} value={currency.id.toString()}>
+                    {currency.code}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {(searchTerm || selectedMarket !== 'all' || selectedCurrency !== 'all') && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={clearFilters}
+            className="w-full h-11 text-sm text-destructive hover:bg-destructive/10"
+          >
+            <FilterX className="h-4 w-4 mr-1" /> Clear Filters
+          </Button>
+        )}
+      </div>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block flex-grow border border-border bg-card min-h-0 overflow-hidden rounded-md">
         <div className="h-full overflow-y-auto overflow-x-auto scrollbar-thin">
           <Table>
             <TableHeader className="sticky top-0 bg-muted/50 z-10 border-b border-border">
@@ -196,6 +253,49 @@ export default function StockList({ initialStocks, markets, currencies }: StockL
             </TableBody>
           </Table>
         </div>
+      </div>
+
+      {/* Mobile Card Layout */}
+      <div className="md:hidden flex-grow border border-border bg-card min-h-0 overflow-y-auto scrollbar-thin p-3 space-y-3">
+        {filteredStocks.length > 0 ? (
+          filteredStocks.map((stock) => (
+            <Link
+              key={stock.id}
+              href={`/company/${stock.ticker}`}
+              className="block border border-border bg-card rounded-lg p-4 hover:bg-muted/30 transition-colors"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <ChevronRight className="h-4 w-4 text-primary flex-shrink-0" />
+                    <span className="font-mono font-medium text-primary text-base">{stock.ticker}</span>
+                  </div>
+                  <p className="text-sm text-foreground font-medium truncate">{stock.name}</p>
+                  <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                    <span className="px-2 py-0.5 bg-muted rounded">{stock.markets?.name ?? '—'}</span>
+                    <span className="px-2 py-0.5 bg-muted rounded">{stock.currencies?.code ?? '—'}</span>
+                  </div>
+                </div>
+                <div className="shrink-0">
+                  <div className={cn(
+                    "flex items-center justify-center rounded-md",
+                    "h-11 w-11 p-0",
+                    "text-muted-foreground"
+                  )}
+                    aria-label={`View details for ${stock.ticker}`}
+                  >
+                    <ExternalLink className="h-5 w-5" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+            <p className="text-sm font-medium">No results found</p>
+            <p className="text-xs">Try adjusting your search or filters</p>
+          </div>
+        )}
       </div>
     </div>
   );
